@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace SysEstoque.Models{
-    public class Usuario{
+    public class Usuario { 
         [Key]
-        [Required]
+        [Required] // Mesmo que o NOT NULL
         public string Login { get; set; }
         [Required]
         public string HashSenha { get; set; }
@@ -15,6 +15,6 @@ namespace SysEstoque.Models{
         public string Email { get; set; }
         [Required]
         public string Telefone { get; set; }
-        public Endereco? Endereco { get; set; }
+        //public Endereco? Endereco { get; set; }
     }
 }

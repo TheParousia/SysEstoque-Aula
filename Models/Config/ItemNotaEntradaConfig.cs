@@ -7,7 +7,7 @@ namespace SysEstoque.Models.Config {
 			builder.HasKey(ItemNIn => new { ItemNIn.NotaEntradaId, ItemNIn.ProdutoId });
 
 			builder.HasOne(ItemNIn => ItemNIn.NotaEntrada)
-					.WithMany(NIn => NIn.ItensProdutoEntrada)
+					.WithMany(NIn => NIn.ItensNotaEntrada)
 					.HasForeignKey(ItemNIn => ItemNIn.NotaEntradaId);
 
 			builder.HasOne(ItemNIn => ItemNIn.Produto)

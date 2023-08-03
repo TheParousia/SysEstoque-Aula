@@ -7,12 +7,14 @@ namespace SysEstoque.Models {
     public class Produto {
         [Key]
         public int Id { get; set; }
-
+        
+        [MaxLength(70)]
         public string Nome { get; set; }
 
         public double Preco { get; set; }
 
         public float Estoque { get; set; }
+
 
 
         [ForeignKey(nameof(Categoria))]
@@ -21,17 +23,25 @@ namespace SysEstoque.Models {
 
 
 
+        [ForeignKey(nameof(UnidadeMedida))]
+        public int UnidadeMedidaId { get; set; }
+        public Categoria UnidadeMedida { get; set; } = new Categoria();
 
 
+        // Modo errado
+        // public ItemNotaEntrada ItensNotaEntrada { get; set; } = new ItemNotaEntrada();
 
 
-		//CONFIGURAÇÃO DE FK NOTA DE ENTRADA
-		public ICollection<NotaEntrada>? NotasEntrada { get; set; } = new List<NotaEntrada>();
+        //CONFIGURAÇÃO DE FK NOTA DE ENTRADA
+        public ICollection<ItemNotaEntrada> ItensNotaEntrada { get; set; } =
+            new List<ItemNotaEntrada>();
+        
+        public ICollection<NotaEntrada>? NotasEntrada { get; set; } = new List<NotaEntrada>();
 		
-		public ICollection<ItemNotaEntrada>? ItensNotaEntrada { get; set; } = new List<ItemNotaEntrada>();
-
         public ICollection<NotaSaida>? NotasSaida { get; set; } = new List<NotaSaida>();
-		
+
 		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; } = new List<ItemNotaSaida>();
+
+        public ICollection<Fornecedor> fornecedores { get; set; }
 	}
 }
