@@ -40,5 +40,17 @@ namespace SysEstoque {
 						);
 			}
 		}
+
+		private void button1_Click(object sender, EventArgs e) {
+			FormAddProduto formAddProduto = new FormAddProduto();
+			formAddProduto.ShowDialog();
+			
+			using (var db = new EstoqueContext()) {
+				dgvProdutos.DataSource = db.Produtos
+												.Include(p => p.Categoria)
+												.Include(p => p.UnidadeMedida)
+												.ToList();
+			}
+		}
 	}
 }
