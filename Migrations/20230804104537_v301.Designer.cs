@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SysEstoque.Models;
 
@@ -10,9 +11,11 @@ using SysEstoque.Models;
 namespace SysEstoque.Migrations
 {
     [DbContext(typeof(EstoqueContext))]
-    partial class EstoqueContextModelSnapshot : ModelSnapshot
+    [Migration("20230804104537_v301")]
+    partial class v301
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -388,7 +391,7 @@ namespace SysEstoque.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SysEstoque.Models.UnidadeMedida", "UnidadeMedida")
+                    b.HasOne("SysEstoque.Models.Categoria", "UnidadeMedida")
                         .WithMany()
                         .HasForeignKey("UnidadeMedidaId")
                         .OnDelete(DeleteBehavior.Cascade)
