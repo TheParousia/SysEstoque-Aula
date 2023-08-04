@@ -31,6 +31,7 @@
 			Estoque = new DataGridViewTextBoxColumn();
 			UnidadeMedida = new DataGridViewTextBoxColumn();
 			Categoria = new DataGridViewTextBoxColumn();
+			button1 = new Button();
 			((System.ComponentModel.ISupportInitialize)dgvProdutos).BeginInit();
 			SuspendLayout();
 			// 
@@ -100,11 +101,22 @@
 			Categoria.Name = "Categoria";
 			Categoria.ReadOnly = true;
 			// 
+			// button1
+			// 
+			button1.Location = new Point(705, 74);
+			button1.Name = "button1";
+			button1.Size = new Size(75, 23);
+			button1.TabIndex = 2;
+			button1.Text = "Add prod";
+			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click;
+			// 
 			// FormMain
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(800, 450);
+			Controls.Add(button1);
 			Controls.Add(dgvProdutos);
 			Controls.Add(label1);
 			Name = "FormMain";
@@ -125,5 +137,6 @@
 		private DataGridViewTextBoxColumn Estoque;
 		private DataGridViewTextBoxColumn UnidadeMedida;
 		private DataGridViewTextBoxColumn Categoria;
+		private Button button1;
 	}
 }
