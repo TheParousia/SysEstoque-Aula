@@ -7,27 +7,13 @@ namespace SysEstoque.Models {
 		// se transformar em tabela no banco de dados
 		public DbSet<Usuario> Usuario { get; set; }
 		
-		//public DbSet<NotaEntrada> NotsaEntrada { get; set; }
+		public DbSet<NotaEntrada> NotsaEntrada { get; set; }
 
 		//Método subrescrito para configurar a conexão ao inicia o sistema
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
 			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022");
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-		/*
 		public DbSet<Produto> Produtos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<UnidadeMedida> UnidadesMedida {get;set;}
@@ -59,6 +45,5 @@ namespace SysEstoque.Models {
 			//CONFIGURANDO SELEÇÃO DE ENTIDADE DE AGREGAÇÃO PARA NotaSaida m:m Produtos
 			new NotaSaidaConfig().Configure(modelBuilder.Entity<NotaSaida>());
 		}
-		*/
 	}
 }
