@@ -19,13 +19,13 @@ namespace SysEstoque.Models {
 
         [ForeignKey(nameof(Categoria))]
         public int CategoriaId { get; set; }
-        public Categoria Categoria { get; set; }
+        public Categoria? Categoria { get; set; }
 
 
 
         [ForeignKey(nameof(UnidadeMedida))]
         public int UnidadeMedidaId { get; set; }
-        public Categoria UnidadeMedida { get; set; } = new Categoria();
+        public UnidadeMedida? UnidadeMedida { get; set; } = new UnidadeMedida();
 
 
         // Modo errado
@@ -42,6 +42,6 @@ namespace SysEstoque.Models {
 
 		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; } = new List<ItemNotaSaida>();
 
-        public ICollection<Fornecedor> fornecedores { get; set; }
+        public ICollection<Fornecedor>? fornecedores { get; set; }
 	}
 }

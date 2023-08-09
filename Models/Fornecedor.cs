@@ -11,9 +11,9 @@ namespace SysEstoque.Models{
         public string? Email { get; set; }
         public string? Telefone { get; set; }
         public Endereco endereco { get; set; }
-        public List<Produto> produtos { get; set; } =
+        public List<Produto>? produtos { get; set; } =
             new List<Produto>();
-        public List<NotaEntrada> NFs { get; set; } =
+        public List<NotaEntrada>? NFs { get; set; } =
             new List<NotaEntrada>();
     }
 }

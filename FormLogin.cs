@@ -5,19 +5,10 @@ namespace SysEstoque
     public partial class FormLogin : Form{
 
         Usuario usuario = new Usuario();
+        ICollection<ItemNotaEntrada> itensNotaEntrada = new List<ItemNotaEntrada>();
 
-        public FormLogin()
-        {
+        public FormLogin(){
             InitializeComponent();
-
-            using (var db = new EstoqueContext())
-            {
-                if (db.Database.CanConnect()){
-                    MessageBox.Show("Pode conectar");
-                }else{
-                    MessageBox.Show("Não pode conectar");
-                }
-            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
