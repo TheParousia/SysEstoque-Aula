@@ -9,66 +9,109 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysEstoque.Models {
-    public partial class FormCategoria : Form {
-        ICollection<Categoria> categorias = new List<Categoria>();
-        BindingSource bindingSourceCategorias = new BindingSource();
+	public partial class FormCategoria : Form {
+		ICollection<Categoria> listaCategorias = new List<Categoria>();
+		BindingSource bindingSourceCategorias = new BindingSource();
 
-        Categoria categoria = new Categoria();
+		Categoria categoria = new Categoria();
 
-        public FormCategoria() {
-            InitializeComponent();
+		public FormCategoria() {
+			InitializeComponent();
 
-            using (var db = new EstoqueContext()) {
-                categorias = db.Categorias.ToList();
+			using (var db = new EstoqueContext()) {
+				listaCategorias = db.Categorias.ToList();
 
-                bindingSourceCategorias.DataSource = categorias;
+				bindingSourceCategorias.DataSource = listaCategorias;
 
-                dgvCategorias.DataSource = bindingSourceCategorias;
-            }
-        }
-        
-        private void textBox1_TextChanged(object sender, EventArgs e) {
+				dgvCategorias.DataSource = bindingSourceCategorias;
+			}
+		}
 
-        }
+		private void textBox1_TextChanged(object sender, EventArgs e) {
 
-        private void btnExcluir_Click(object sender, EventArgs e) {
-            if (dgvCategorias.SelectedRows.Count > 0) {
-                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+		}
 
-                bindingSourceCategorias.Remove(categoria);
+		private void btnExcluir_Click(object sender, EventArgs e) {
+			if (dgvCategorias.SelectedRows.Count > 0) {
+				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
 
-                using (var db = new EstoqueContext()) {
-                    db.Categorias.Remove(categoria);
-                    db.SaveChanges();
-                }
-            }
-        }
+				bindingSourceCategorias.Remove(categoria);
 
-        private void btnAtualizar_Click(object sender, EventArgs e) {
-            if (dgvCategorias.SelectedRows.Count > 0) {
-                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+				try {
+					using (var db = new EstoqueContext()) {
+						db.Categorias.Remove(categoria);
+						db.SaveChanges();
+					}
 
-                txbId.Text = categoria.Id.ToString();
-                txbNome.Text = categoria.Nome;
-                txbDescricao.Text = categoria.Descricao;
-            }
-        }
+					bindingSourceCategorias.Remove(categoria);
 
-        private void btnSalvar_Click(object sender, EventArgs e) {
-            if (txbId.Text != "" ) {
-                categoria.Id = Convert.ToInt32(txbId.Text);
-                categoria.Nome = txbNome.Text;
-                categoria.Descricao = txbDescricao.Text;
+				} catch(Microsoft.EntityFrameworkCore.DbUpdateException ex) {
+					statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
+					statusMsg.ForeColor = Color.Red;
 
-                using (var db = new EstoqueContext()) {
-                    db.Categorias.Update(categoria);
-                    db.SaveChanges();
+					Task.Delay(2000).ContinueWith((task) => {
+						statusMsg.Text = "";
+						statusMsg.ForeColor = Color.Red;
+					});
+				}
+			} else {
+				statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
+				statusMsg.ForeColor = Color.Red;
 
-                    categorias = db.Categorias.ToList();
+				Task.Delay(5000).ContinueWith((task) => {
+					statusMsg.Text = "";
+					statusMsg.ForeColor = Color.Red;
+				});
+			}
+		}
 
-                    dgvCategorias.Refresh();
-                }
-            }
-        }
-    }
+		private void btnAtualizar_Click(object sender, EventArgs e) {
+			if (dgvCategorias.SelectedRows.Count > 0) {
+				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+
+				txbId.Text = categoria.Id.ToString();
+				txbNome.Text = categoria.Nome;
+				txbDescricao.Text = categoria.Descricao;
+			}
+		}
+
+		private void btnSalvar_Click(object sender, EventArgs e) {
+			if (txbId.Text != "") {
+				categoria.Id = Convert.ToInt32(txbId.Text);
+				categoria.Nome = txbNome.Text;
+				categoria.Descricao = txbDescricao.Text;
+
+				using (var db = new EstoqueContext()) {
+					db.Categorias.Update(categoria);
+					db.SaveChanges();
+
+					listaCategorias = db.Categorias.ToList();
+
+					dgvCategorias.Refresh();
+				}
+
+				txbId.Text = "";
+				txbNome.Text = "";
+				txbDescricao.Text = "";
+			} else {
+				categoria.Id = 0;
+				categoria.Nome = txbNome.Text;
+				categoria.Descricao = txbDescricao.Text;
+
+				using (var db = new EstoqueContext()) {
+
+					db.Categorias.Add(categoria);
+					db.SaveChanges();
+
+					bindingSourceCategorias.DataSource = db.Categorias.ToList();
+
+					dgvCategorias.Refresh();
+				}
+			}
+		}
+
+		private void dgvCategorias_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
+
+		}
+	}
 }

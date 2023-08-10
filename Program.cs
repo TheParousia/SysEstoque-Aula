@@ -13,7 +13,9 @@ namespace SysEstoque
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormCategoria());
+            //Application.Run(new FormCategoria());
+            //Application.Run(new FormAddProduto());
+            Application.Run(new FormCRUDNotaEntrada());
             //Application.Run(new FormMain());
             //Application.Run(new FormLogin());
         }
