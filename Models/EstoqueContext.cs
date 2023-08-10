@@ -7,6 +7,7 @@ namespace SysEstoque.Models {
 		// se transformar em tabela no banco de dados
 		public DbSet<Usuario> Usuario { get; set; }
 		public DbSet<NotaEntrada> NotsaEntrada { get; set; }
+
 		public DbSet<Produto> Produtos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
 		public DbSet<UnidadeMedida> UnidadesMedida {get;set;}

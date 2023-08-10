@@ -21,8 +21,6 @@ namespace SysEstoque.Models {
         public int CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
 
-
-
         [ForeignKey(nameof(UnidadeMedida))]
         public int UnidadeMedidaId { get; set; }
         public UnidadeMedida? UnidadeMedida { get; set; } = new UnidadeMedida();
@@ -33,14 +31,13 @@ namespace SysEstoque.Models {
 
 
         //CONFIGURAÇÃO DE FK NOTA DE ENTRADA
-        public ICollection<ItemNotaEntrada> ItensNotaEntrada { get; set; } =
-            new List<ItemNotaEntrada>();
+        public ICollection<ItemNotaEntrada>? ItensNotaEntrada { get; set; }
         
-        public ICollection<NotaEntrada>? NotasEntrada { get; set; } = new List<NotaEntrada>();
+        public ICollection<NotaEntrada>? NotasEntrada { get; set; }
 		
-        public ICollection<NotaSaida>? NotasSaida { get; set; } = new List<NotaSaida>();
+        public ICollection<NotaSaida>? NotasSaida { get; set; }
 
-		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; } = new List<ItemNotaSaida>();
+		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; }
 
         public ICollection<Fornecedor>? fornecedores { get; set; }
 	}
