@@ -14,6 +14,8 @@ namespace SysEstoque
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new FormCategoria());
+
+
             //Application.Run(new FormMain());
             //Application.Run(new FormLogin());
         }

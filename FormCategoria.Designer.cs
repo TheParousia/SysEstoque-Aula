@@ -56,7 +56,6 @@
             txbId.ReadOnly = true;
             txbId.Size = new Size(85, 27);
             txbId.TabIndex = 1;
-            txbId.TextChanged += textBox1_TextChanged;
             // 
             // dgvCategorias
             // 
@@ -108,7 +107,6 @@
             txbNome.Name = "txbNome";
             txbNome.Size = new Size(164, 27);
             txbNome.TabIndex = 1;
-            txbNome.TextChanged += textBox1_TextChanged;
             // 
             // label2
             // 
@@ -125,7 +123,7 @@
             txbDescricao.Name = "txbDescricao";
             txbDescricao.Size = new Size(245, 27);
             txbDescricao.TabIndex = 1;
-            txbDescricao.TextChanged += textBox1_TextChanged;
+            txbDescricao.TextChanged += txbDescricao_TextChanged;
             // 
             // label3
             // 
