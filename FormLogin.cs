@@ -12,7 +12,7 @@ namespace SysEstoque {
 				if (db.Database.CanConnect()) {
 					MessageBox.Show("Pode conectar");
 				} else {
-					MessageBox.Show("Não pode conectar");
+					MessageBox.Show("NÃ£o pode conectar");
 				}
 			}
 		}

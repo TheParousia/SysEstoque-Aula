@@ -11,7 +11,7 @@ using SysEstoque.Models;
 namespace SysEstoque.Migrations
 {
     [DbContext(typeof(EstoqueContext))]
-    [Migration("20230802171142_v100")]
+    [Migration("20230809182730_v100")]
     partial class v100
     {
         /// <inheritdoc />
@@ -21,6 +21,21 @@ namespace SysEstoque.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("FornecedorProduto", b =>
+                {
+                    b.Property<string>("fornecedoresCNPJ")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("produtosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("fornecedoresCNPJ", "produtosId");
+
+                    b.HasIndex("produtosId");
+
+                    b.ToTable("FornecedorProduto");
+                });
 
             modelBuilder.Entity("SysEstoque.Models.Almoxarife", b =>
                 {
@@ -162,6 +177,7 @@ namespace SysEstoque.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FornecedorCNPJ")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("Numeracao")
@@ -214,12 +230,10 @@ namespace SysEstoque.Migrations
                     b.Property<float>("Estoque")
                         .HasColumnType("float");
 
-                    b.Property<string>("FornecedorCNPJ")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(70)
+                        .HasColumnType("varchar(70)");
 
                     b.Property<double>("Preco")
                         .HasColumnType("double");
@@ -230,8 +244,6 @@ namespace SysEstoque.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoriaId");
-
-                    b.HasIndex("FornecedorCNPJ");
 
                     b.HasIndex("UnidadeMedidaId");
 
@@ -267,9 +279,6 @@ namespace SysEstoque.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("EnderecoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HashSenha")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -288,9 +297,22 @@ namespace SysEstoque.Migrations
 
                     b.HasKey("Login");
 
-                    b.HasIndex("EnderecoId");
-
                     b.ToTable("Usuario");
+                });
+
+            modelBuilder.Entity("FornecedorProduto", b =>
+                {
+                    b.HasOne("SysEstoque.Models.Fornecedor", null)
+                        .WithMany()
+                        .HasForeignKey("fornecedoresCNPJ")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SysEstoque.Models.Produto", null)
+                        .WithMany()
+                        .HasForeignKey("produtosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SysEstoque.Models.Fornecedor", b =>
@@ -346,7 +368,9 @@ namespace SysEstoque.Migrations
                 {
                     b.HasOne("SysEstoque.Models.Fornecedor", "Fornecedor")
                         .WithMany("NFs")
-                        .HasForeignKey("FornecedorCNPJ");
+                        .HasForeignKey("FornecedorCNPJ")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Fornecedor");
                 });
@@ -370,11 +394,7 @@ namespace SysEstoque.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SysEstoque.Models.Fornecedor", null)
-                        .WithMany("produtos")
-                        .HasForeignKey("FornecedorCNPJ");
-
-                    b.HasOne("SysEstoque.Models.Categoria", "UnidadeMedida")
+                    b.HasOne("SysEstoque.Models.UnidadeMedida", "UnidadeMedida")
                         .WithMany()
                         .HasForeignKey("UnidadeMedidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -385,20 +405,9 @@ namespace SysEstoque.Migrations
                     b.Navigation("UnidadeMedida");
                 });
 
-            modelBuilder.Entity("SysEstoque.Models.Usuario", b =>
-                {
-                    b.HasOne("SysEstoque.Models.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("EnderecoId");
-
-                    b.Navigation("Endereco");
-                });
-
             modelBuilder.Entity("SysEstoque.Models.Fornecedor", b =>
                 {
                     b.Navigation("NFs");
-
-                    b.Navigation("produtos");
                 });
 
             modelBuilder.Entity("SysEstoque.Models.NotaEntrada", b =>

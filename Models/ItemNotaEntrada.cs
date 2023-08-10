@@ -11,9 +11,10 @@ namespace SysEstoque.Models {
 
 		[ForeignKey(nameof(Produto))]
 		public int ProdutoId { get; set; }
-		
-		public NotaEntrada NotaEntrada = new();
-		public Produto Produto = new();
+
+
+		public NotaEntrada? NotaEntrada = new();
+		public Produto? Produto = new();
 
 		public int Quantidade { get; set; }
 	}

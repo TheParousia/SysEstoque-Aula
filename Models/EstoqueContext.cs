@@ -6,9 +6,7 @@ namespace SysEstoque.Models {
         // Cadastrando para EFCore a classe que vai
 		// se transformar em tabela no banco de dados
 		public DbSet<Usuario> Usuario { get; set; }
-		
 		public DbSet<NotaEntrada> NotsaEntrada { get; set; }
-
 
 		public DbSet<Produto> Produtos { get; set; }
 		public DbSet<Categoria> Categorias { get; set; }
@@ -25,10 +23,9 @@ namespace SysEstoque.Models {
         public DbSet<NotaSaida> NotaSaida { get; set; }
         public DbSet<ItemNotaSaida> ItemNotaSaida { get; set; }
 
-		
 		//Método subrescrito para configurar a conexão ao inicia o sistema
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
-			options.UseMySQL("Server=127.0.0.1;port=3306;database=sysestoqueaula;uid=root;password=#Root2022");
+			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022");
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {

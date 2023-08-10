@@ -21,10 +21,10 @@ namespace SysEstoque.Models {
         public int CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
 
-
         [ForeignKey(nameof(UnidadeMedida))]
         public int UnidadeMedidaId { get; set; }
-        public UnidadeMedida? UnidadeMedida { get; set; }
+        public UnidadeMedida? UnidadeMedida { get; set; } = new UnidadeMedida();
+
 
         // Modo errado
         // public ItemNotaEntrada ItensNotaEntrada { get; set; } = new ItemNotaEntrada();

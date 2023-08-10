@@ -174,6 +174,7 @@ namespace SysEstoque.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FornecedorCNPJ")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("Numeracao")
@@ -364,7 +365,9 @@ namespace SysEstoque.Migrations
                 {
                     b.HasOne("SysEstoque.Models.Fornecedor", "Fornecedor")
                         .WithMany("NFs")
-                        .HasForeignKey("FornecedorCNPJ");
+                        .HasForeignKey("FornecedorCNPJ")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Fornecedor");
                 });
