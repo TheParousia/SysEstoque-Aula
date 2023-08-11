@@ -36,28 +36,74 @@ namespace SysEstoque.Models {
 				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
 
 				bindingSourceCategorias.Remove(categoria);
-
-				try {
+        
+        try {
 					using (var db = new EstoqueContext()) {
 						db.Categorias.Remove(categoria);
 						db.SaveChanges();
 					}
-
-					bindingSourceCategorias.Remove(categoria);
-
-				} catch(Microsoft.EntityFrameworkCore.DbUpdateException ex) {
-					statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
+        }catch(Microsoft.EntityFrameworkCore.DbUpdateException ex) {
+					statusMsg.Text = "Erro ao excluir o dado";
 					statusMsg.ForeColor = Color.Red;
-
-					Task.Delay(2000).ContinueWith((task) => {
+					bindingSourceCategorias.Remove(categoria);
+				}
+        
+        Task.Delay(2000).ContinueWith((task) => {
 						statusMsg.Text = "";
 						statusMsg.ForeColor = Color.Red;
-					});
-				}
+        });
+        
 			} else {
 				statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
 				statusMsg.ForeColor = Color.Red;
+        
+        Task.Delay(2000).ContinueWith((task) => {
+						statusMsg.Text = "";
+						statusMsg.ForeColor = Color.Red;
+        });
+      }
+    }
+        
+        private void btnSalvar_Click(object sender, EventArgs e) {
+            if (txbId.Text != "") {
+                categoria.Id = Convert  .ToInt32(txbId.Text);
+                categoria.Nome = txbNome.Text;
+                categoria.Descricao = txbDescricao.Text;
 
+                using (var db = new EstoqueContext()) {
+                    listaCategoria = db.Categorias.ToList();
+                    bindingSourceCategorias.DataSource = listaCategoria;
+                    dgvCategorias.Refresh();
+                }
+
+                txbId.Text = categoria.Id.ToString();
+                txbNome.Text = categoria.Nome;
+                txbDescricao.Text = categoria.Descricao;
+
+            } else {
+                
+                categoria.Id = null;
+                categoria.Nome = txbNome.Text;
+                categoria.Descricao = txbDescricao.Text;
+
+                using (var db = new EstoqueContext()) {
+                    db.Categorias.Add(categoria);
+                    db.SaveChanges();
+
+                    listaCategoria = db.Categorias.ToList();
+
+                    bindingSourceCategorias.DataSource = listaCategoria;
+
+                    dgvCategorias.DataSource = bindingSourceCategorias;
+
+                    dgvCategorias.Refresh();
+                }
+
+
+            }
+        }
+
+    
 				Task.Delay(5000).ContinueWith((task) => {
 					statusMsg.Text = "";
 					statusMsg.ForeColor = Color.Red;
@@ -114,4 +160,3 @@ namespace SysEstoque.Models {
 
 		}
 	}
-}
