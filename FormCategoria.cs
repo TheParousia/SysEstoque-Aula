@@ -9,70 +9,88 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysEstoque.Models {
-	public partial class FormCategoria : Form {
-		ICollection<Categoria> listaCategorias = new List<Categoria>();
-		BindingSource bindingSourceCategorias = new BindingSource();
+    public partial class FormCategoria : Form {
 
-		Categoria categoria = new Categoria();
+        ICollection<Categoria> listaCategorias = new List<Categoria>();
+        BindingSource bindingSourceCategorias = new BindingSource();
 
-		public FormCategoria() {
-			InitializeComponent();
+        Categoria categoria = new Categoria();
 
-			using (var db = new EstoqueContext()) {
-				listaCategorias = db.Categorias.ToList();
+        private bool EstaAtualizando = false;
 
-				bindingSourceCategorias.DataSource = listaCategorias;
+        public FormCategoria() {
+            InitializeComponent();
 
-				dgvCategorias.DataSource = bindingSourceCategorias;
-			}
-		}
+            using (var db = new EstoqueContext()) {
+                listaCategorias = db.Categorias.ToList();
 
-		private void textBox1_TextChanged(object sender, EventArgs e) {
+                bindingSourceCategorias.DataSource = listaCategorias;
 
-		}
+                dgvCategorias.DataSource = bindingSourceCategorias;
+            }
+        }
 
-		private void btnExcluir_Click(object sender, EventArgs e) {
-			if (dgvCategorias.SelectedRows.Count > 0) {
-				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+        private void textBox1_TextChanged(object sender, EventArgs e) {
 
-				bindingSourceCategorias.Remove(categoria);
-        
-        try {
-					using (var db = new EstoqueContext()) {
-						db.Categorias.Remove(categoria);
-						db.SaveChanges();
-					}
-        }catch(Microsoft.EntityFrameworkCore.DbUpdateException ex) {
-					statusMsg.Text = "Erro ao excluir o dado";
-					statusMsg.ForeColor = Color.Red;
-					bindingSourceCategorias.Remove(categoria);
-				}
-        
-        Task.Delay(2000).ContinueWith((task) => {
-						statusMsg.Text = "";
-						statusMsg.ForeColor = Color.Red;
-        });
-        
-			} else {
-				statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
-				statusMsg.ForeColor = Color.Red;
-        
-        Task.Delay(2000).ContinueWith((task) => {
-						statusMsg.Text = "";
-						statusMsg.ForeColor = Color.Red;
-        });
-      }
-    }
-        
+        }
+
+        private void btnExcluir_Click(object sender, EventArgs e) {
+            if (dgvCategorias.SelectedRows.Count > 0) {
+                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+
+                bindingSourceCategorias.Remove(categoria);
+
+                using (var db = new EstoqueContext()) {
+                    db.Categorias.Remove(categoria);
+                    db.SaveChanges();
+                }
+
+
+
+
+
+                try {
+
+                } catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) {
+                    statusMsg.Text = "Erro ao excluir o dado";
+                    statusMsg.ForeColor = Color.Red;
+                    bindingSourceCategorias.Remove(categoria);
+                }
+
+
+            } else {
+                /*
+                Task.Delay(2000).ContinueWith((task) => {
+                    statusMsg.Text = "";
+                    statusMsg.ForeColor = Color.Red;
+                });
+                */
+
+                /*
+                statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
+                statusMsg.ForeColor = Color.Red;
+
+                Task.Delay(2000).ContinueWith((task) => {
+                    statusMsg.Text = "";
+                    statusMsg.ForeColor = Color.Red;
+                });
+                */
+            }
+        }
+
         private void btnSalvar_Click(object sender, EventArgs e) {
-            if (txbId.Text != "") {
-                categoria.Id = Convert  .ToInt32(txbId.Text);
+            if (EstaAtualizando) {
+                // Pegar o dado formulário e atualiza no banco de dados
+                categoria.Id = Convert.ToInt32(txbId.Text);
                 categoria.Nome = txbNome.Text;
                 categoria.Descricao = txbDescricao.Text;
 
                 using (var db = new EstoqueContext()) {
-                    listaCategoria = db.Categorias.ToList();
-                    bindingSourceCategorias.DataSource = listaCategoria;
+                    db.Categorias.Update(categoria);
+                    db.SaveChanges();
+
+                    listaCategorias = db.Categorias.ToList();
+                    bindingSourceCategorias.DataSource = listaCategorias;
                     dgvCategorias.Refresh();
                 }
 
@@ -80,8 +98,11 @@ namespace SysEstoque.Models {
                 txbNome.Text = categoria.Nome;
                 txbDescricao.Text = categoria.Descricao;
 
+                EstaAtualizando = false;
+
             } else {
-                
+                // Pegar o dado formulário e vai inserir no banco de dados
+
                 categoria.Id = null;
                 categoria.Nome = txbNome.Text;
                 categoria.Descricao = txbDescricao.Text;
@@ -90,73 +111,44 @@ namespace SysEstoque.Models {
                     db.Categorias.Add(categoria);
                     db.SaveChanges();
 
-                    listaCategoria = db.Categorias.ToList();
-
-                    bindingSourceCategorias.DataSource = listaCategoria;
-
+                    listaCategorias = db.Categorias.ToList();
+                    bindingSourceCategorias.DataSource = listaCategorias;
                     dgvCategorias.DataSource = bindingSourceCategorias;
-
                     dgvCategorias.Refresh();
                 }
-
-
             }
         }
 
-    
-				Task.Delay(5000).ContinueWith((task) => {
-					statusMsg.Text = "";
-					statusMsg.ForeColor = Color.Red;
-				});
-			}
-		}
+        private void btnAtualizar_Click(object sender, EventArgs e) {
+            if (dgvCategorias.SelectedRows.Count > 0) {
+                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
 
-		private void btnAtualizar_Click(object sender, EventArgs e) {
-			if (dgvCategorias.SelectedRows.Count > 0) {
-				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+                txbId.Text = categoria.Id.ToString();
+                txbNome.Text = categoria.Nome;
+                txbDescricao.Text = categoria.Descricao;
 
-				txbId.Text = categoria.Id.ToString();
-				txbNome.Text = categoria.Nome;
-				txbDescricao.Text = categoria.Descricao;
-			}
-		}
+                EstaAtualizando = true;
+            }
+        }
 
-		private void btnSalvar_Click(object sender, EventArgs e) {
-			if (txbId.Text != "") {
-				categoria.Id = Convert.ToInt32(txbId.Text);
-				categoria.Nome = txbNome.Text;
-				categoria.Descricao = txbDescricao.Text;
 
-				using (var db = new EstoqueContext()) {
-					db.Categorias.Update(categoria);
-					db.SaveChanges();
 
-					listaCategorias = db.Categorias.ToList();
+        private void dgvCategorias_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
 
-					dgvCategorias.Refresh();
-				}
+        }
 
-				txbId.Text = "";
-				txbNome.Text = "";
-				txbDescricao.Text = "";
-			} else {
-				categoria.Id = 0;
-				categoria.Nome = txbNome.Text;
-				categoria.Descricao = txbDescricao.Text;
+        private void FormCategoria_Load(object sender, EventArgs e) {
 
-				using (var db = new EstoqueContext()) {
+        }
+    }
+}
 
-					db.Categorias.Add(categoria);
-					db.SaveChanges();
 
-					bindingSourceCategorias.DataSource = db.Categorias.ToList();
 
-					dgvCategorias.Refresh();
-				}
-			}
-		}
 
-		private void dgvCategorias_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
-
-		}
-	}
+/*
+Task.Delay(5000).ContinueWith((task) => {
+    statusMsg.Text = "";
+    statusMsg.ForeColor = Color.Red;
+});
+*/

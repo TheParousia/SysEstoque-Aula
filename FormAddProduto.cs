@@ -8,44 +8,56 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using SysEstoque.Utils;
+
 namespace SysEstoque.Models {
-	public partial class FormAddProduto : Form {
-		Produto produto = new Produto();
+    public partial class FormAddProduto : Form {
+        BindingSource bindingSourceProdutos = new BindingSource();
+        ICollection<Produto> listaProdutos = new List<Produto>();
+        Produto produto = new Produto();
 
-		public FormAddProduto() {
-			InitializeComponent();
-      
-			using (var db = new EstoqueContext()) {
-				
-				cbxCategorias.DataSource =  db.Categorias.ToList();
-				cbxCategorias.DisplayMember = "Nome";
-				cbxCategorias.ValueMember = "Id";
-				cbxCategorias.SelectedIndex = -1;
+        public FormAddProduto() {
+            InitializeComponent();
 
-				cbxUnidadesMedida.DataSource = db.UnidadesMedida.ToList();
-				cbxUnidadesMedida.DisplayMember = "Nome";
-				cbxUnidadesMedida.ValueMember = "Id";
-				cbxUnidadesMedida.SelectedIndex = -1;
-			} 
-		}
+            using (var db = new EstoqueContext()) {
 
-		private void button1_Click(object sender, EventArgs e) {
-			produto.Nome = txbNome.Text;
-			produto.Preco = Convert.ToDouble(txbPreco.Text);
-			produto.CategoriaId = (int)cbxCategorias.SelectedValue;
-			produto.UnidadeMedidaId = (int)cbxUnidadesMedida.SelectedValue;
+                cbxCategorias.DataSource = db.Categorias.ToList();
+                cbxCategorias.DisplayMember = "Nome";
+                cbxCategorias.ValueMember = "Id";
+                cbxCategorias.SelectedIndex = -1;
 
-			using (var db = new EstoqueContext()) {
+                cbxUnidadesMedida.DataSource = db.UnidadesMedida.ToList();
+                cbxUnidadesMedida.DisplayMember = "Nome";
+                cbxUnidadesMedida.ValueMember = "Id";
+                cbxUnidadesMedida.SelectedIndex = -1;
 
-				db.Produtos.Add(produto);
+                //listaProdutos
 
-				db.SaveChanges();
-				
-				MessageBox.Show($"Num of products in local: {db.Produtos.Count()}");
+                bindingSourceProdutos.DataSource = db.Produtos.ToList();
+                dgvProdutos.DataSource = bindingSourceProdutos;
+            }
+        }
 
-				//db.Produtos.ToList().ForEach(x => MessageBox.Show(x.Nome));
+        private void button1_Click(object sender, EventArgs e) {
+            produto.Id = null;
+            produto.Nome = txbNome.Text.ToString();
+            produto.Estoque = 0;
+            produto.Preco = Convert.ToDouble(txbPreco.Text);
+            produto.CategoriaId = (int)cbxCategorias.SelectedValue;
+            produto.UnidadeMedidaId = (int)cbxUnidadesMedida.SelectedValue;
 
-			}
-		}
-	}
+            using (var db = new EstoqueContext()) {
+                db.Produtos.Add(produto);
+                db.SaveChanges();
+
+                bindingSourceProdutos.DataSource = db.Produtos.ToList();
+            }
+        }
+
+        private void dgvProdutos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+           if ((dgvProdutos.Rows[e.RowIndex].DataBoundItem != null) && (dgvProdutos.Columns[e.ColumnIndex].DataPropertyName.Contains("."))) {
+                e.Value = BindProperty.resolve(dgvProdutos.Rows[e.RowIndex].DataBoundItem, dgvProdutos.Columns[e.ColumnIndex].DataPropertyName);
+           }
+        }
+    }
 }

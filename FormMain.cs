@@ -1,6 +1,6 @@
-﻿using EstoqueComEF5.Utilitarios;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SysEstoque.Models;
+using SysEstoque.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
