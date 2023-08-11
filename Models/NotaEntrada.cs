@@ -8,7 +8,7 @@ namespace SysEstoque.Models {
 
 		[ForeignKey(nameof(Fornecedor))]
 		public string FornecedorCNPJ { get; set; }
-		public Fornecedor? Fornecedor { get; set; } = new Fornecedor();
+		public Fornecedor? Fornecedor { get; set; }
 		public int Numeracao { get; set; }
 		public int Serie { get; set; }
 		public float ValorTotal { get; set; }

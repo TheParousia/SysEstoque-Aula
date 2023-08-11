@@ -1,4 +1,5 @@
-﻿using SysEstoque.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SysEstoque.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,12 +48,17 @@ namespace SysEstoque {
 		}
 
 		private void btnAddNE_Click(object sender, EventArgs e) {
-			notaEntrada.ValorTotal = 100;
-			notaEntrada.Numeracao = Convert.ToInt32(txbNumeroNota.Text);
-			notaEntrada.Serie = Convert.ToInt32(txbSerieNE.Text);
+			notaEntrada.ValorTotal = 0;
+			notaEntrada.Numeracao = Convert.ToInt32(txbNumeroNota.Text) | 32;
+			notaEntrada.Serie = Convert.ToInt32(txbSerieNE.Text) | 1;
 			notaEntrada.DataEmicao = DateTime.Now;
 			notaEntrada.FornecedorCNPJ = txbCNPJ.Text;
 
+			for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
+				var p = new Produto();
+				p = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
+				notaEntrada.ValorTotal += (float) (p.Preco * Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[2].Value.ToString()));
+			}
 
 			using (var db = new EstoqueContext()) {
 				try {
@@ -60,24 +66,30 @@ namespace SysEstoque {
 				} catch {
 					notaEntrada.IdNotaEntrada = 1;
 				}
-				
 
+				notaEntrada.IdNotaEntrada++;
+
+				// Adiciona-se a nota ao banco de dados primeiramente
 				db.NotaEntrada.Add(notaEntrada);
 
-				db.SaveChanges();	
-				
-				var fornecedorDB = db.Fornecedor.FirstOrDefault(x => x.CNPJ == txbCNPJ.Text);
+				db.SaveChanges();
 
-				fornecedorDB.NFs.Add(notaEntrada);
+				// Adiciona-se os itens da nota
+				for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
+					var INE = new ItemNotaEntrada();
+					INE.ProdutoId = (int)dgvProdutoDaNota.Rows[i].Cells[0].Value;
+					INE.NotaEntradaId = notaEntrada.IdNotaEntrada;
+					INE.Quantidade = Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[2].Value.ToString()) | 1;
 
-				db.ItemNotaEntrada.Add(new ItemNotaEntrada {
-					ProdutoId = (int)dgvProdutoDaNota.Rows[0].Cells[0].Value,
-					NotaEntradaId = Convert.ToInt32(txbNumeroNota.Text),
-					Quantidade = 12
-				});
+					db.ItemNotaEntrada.Add(INE);
+					
+					db.SaveChanges();
 
-				db.SaveChanges();	
+					INE = null;
+				}
 			}
+
+			notaEntrada = new NotaEntrada();
 		}
 
 		private void btnTest_Click(object sender, EventArgs e) {
