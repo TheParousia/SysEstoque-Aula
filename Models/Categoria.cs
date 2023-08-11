@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SysEstoque.Models {
@@ -7,7 +8,7 @@ namespace SysEstoque.Models {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
         public string Nome{ get; set; }
-		public string? Descricao { get; set; }
+    		public string? Descricao { get; set; }
 
     }
 }

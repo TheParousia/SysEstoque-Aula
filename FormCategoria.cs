@@ -9,66 +9,70 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysEstoque.Models {
-    public partial class FormCategoria : Form {
-        ICollection<Categoria> listaCategoria = new List<Categoria>();
-        BindingSource bindingSourceCategorias = new BindingSource();
+	public partial class FormCategoria : Form {
+		ICollection<Categoria> listaCategorias = new List<Categoria>();
+		BindingSource bindingSourceCategorias = new BindingSource();
+
+		Categoria categoria = new Categoria();
+
+		public FormCategoria() {
+			InitializeComponent();
+
+			using (var db = new EstoqueContext()) {
+				listaCategorias = db.Categorias.ToList();
+
+				bindingSourceCategorias.DataSource = listaCategorias;
+
+				dgvCategorias.DataSource = bindingSourceCategorias;
+			}
+		}
+
+		private void textBox1_TextChanged(object sender, EventArgs e) {
+
+		}
+
+		private void btnExcluir_Click(object sender, EventArgs e) {
+			if (dgvCategorias.SelectedRows.Count > 0) {
+				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+
+				bindingSourceCategorias.Remove(categoria);
         
-        Categoria categoria = new Categoria();
-
-
+        try {
+					using (var db = new EstoqueContext()) {
+						db.Categorias.Remove(categoria);
+						db.SaveChanges();
+					}
+        }catch(Microsoft.EntityFrameworkCore.DbUpdateException ex) {
+					statusMsg.Text = "Erro ao excluir o dado";
+					statusMsg.ForeColor = Color.Red;
+					bindingSourceCategorias.Remove(categoria);
+				}
         
-        public FormCategoria() {
-            InitializeComponent();
-
-            using (var db = new EstoqueContext()) {
-                listaCategoria = db.Categorias.ToList();
-
-                bindingSourceCategorias.DataSource = listaCategoria;
-
-                dgvCategorias.DataSource = bindingSourceCategorias;
-            }
-        }
-
-        private void btnExcluir_Click(object sender, EventArgs e) {
-
-            if (dgvCategorias.SelectedRows.Count > 0) {
-
-                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
-
-                //Remove a categoria do DataGridView
-                bindingSourceCategorias.Remove(categoria);
-
-                //Remove do Banco de Dados
-                using (var db = new EstoqueContext()) {
-                    db.Categorias.Remove(categoria);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-
-        private void btnAtualizar_Click(object sender, EventArgs e) {
-            if (dgvCategorias.SelectedRows.Count > 0) {
-                categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
-
-                txbId.Text = categoria.Id.ToString();
-                txbNome.Text = categoria.Nome;
-                txbDescricao.Text = categoria.Descricao;
-            }
-        }
-
+        Task.Delay(2000).ContinueWith((task) => {
+						statusMsg.Text = "";
+						statusMsg.ForeColor = Color.Red;
+        });
+        
+			} else {
+				statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
+				statusMsg.ForeColor = Color.Red;
+        
+        Task.Delay(2000).ContinueWith((task) => {
+						statusMsg.Text = "";
+						statusMsg.ForeColor = Color.Red;
+        });
+      }
+    }
+        
         private void btnSalvar_Click(object sender, EventArgs e) {
             if (txbId.Text != "") {
-                categoria.Id = Convert.ToInt32(txbId.Text);
+                categoria.Id = Convert  .ToInt32(txbId.Text);
                 categoria.Nome = txbNome.Text;
                 categoria.Descricao = txbDescricao.Text;
 
                 using (var db = new EstoqueContext()) {
-                    db.Categorias.Update(categoria);
-                    db.SaveChanges();
-
                     listaCategoria = db.Categorias.ToList();
-
+                    bindingSourceCategorias.DataSource = listaCategoria;
                     dgvCategorias.Refresh();
                 }
 
@@ -99,8 +103,60 @@ namespace SysEstoque.Models {
             }
         }
 
-        private void txbDescricao_TextChanged(object sender, EventArgs e) {
+    
+				Task.Delay(5000).ContinueWith((task) => {
+					statusMsg.Text = "";
+					statusMsg.ForeColor = Color.Red;
+				});
+			}
+		}
 
-        }
-    }
-}
+		private void btnAtualizar_Click(object sender, EventArgs e) {
+			if (dgvCategorias.SelectedRows.Count > 0) {
+				categoria = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
+
+				txbId.Text = categoria.Id.ToString();
+				txbNome.Text = categoria.Nome;
+				txbDescricao.Text = categoria.Descricao;
+			}
+		}
+
+		private void btnSalvar_Click(object sender, EventArgs e) {
+			if (txbId.Text != "") {
+				categoria.Id = Convert.ToInt32(txbId.Text);
+				categoria.Nome = txbNome.Text;
+				categoria.Descricao = txbDescricao.Text;
+
+				using (var db = new EstoqueContext()) {
+					db.Categorias.Update(categoria);
+					db.SaveChanges();
+
+					listaCategorias = db.Categorias.ToList();
+
+					dgvCategorias.Refresh();
+				}
+
+				txbId.Text = "";
+				txbNome.Text = "";
+				txbDescricao.Text = "";
+			} else {
+				categoria.Id = 0;
+				categoria.Nome = txbNome.Text;
+				categoria.Descricao = txbDescricao.Text;
+
+				using (var db = new EstoqueContext()) {
+
+					db.Categorias.Add(categoria);
+					db.SaveChanges();
+
+					bindingSourceCategorias.DataSource = db.Categorias.ToList();
+
+					dgvCategorias.Refresh();
+				}
+			}
+		}
+
+		private void dgvCategorias_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
+
+		}
+	}

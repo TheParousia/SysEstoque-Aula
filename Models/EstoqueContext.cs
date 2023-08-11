@@ -1,5 +1,7 @@
 ﻿using SysEstoque.Models.Config;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace SysEstoque.Models {
 	public class EstoqueContext : DbContext {
@@ -26,6 +28,15 @@ namespace SysEstoque.Models {
 		//Método subrescrito para configurar a conexão ao inicia o sistema
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
 			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022");
+
+			/*
+			options
+				.EnableSensitiveDataLogging(true)
+				.UseLoggerFactory(new LoggerFactory().AddConsole(
+					(category, level) =>
+						level == LogLevel.Information && category == DbLoggerCategory.Database.Name == true)
+				);
+			*/
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {

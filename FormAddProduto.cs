@@ -14,7 +14,7 @@ namespace SysEstoque.Models {
 
 		public FormAddProduto() {
 			InitializeComponent();
-			
+      
 			using (var db = new EstoqueContext()) {
 				
 				cbxCategorias.DataSource =  db.Categorias.ToList();

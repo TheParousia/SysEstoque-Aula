@@ -56,7 +56,7 @@ namespace SysEstoque.Migrations
 
             modelBuilder.Entity("SysEstoque.Models.Categoria", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 

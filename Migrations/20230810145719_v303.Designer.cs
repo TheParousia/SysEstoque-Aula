@@ -11,8 +11,8 @@ using SysEstoque.Models;
 namespace SysEstoque.Migrations
 {
     [DbContext(typeof(EstoqueContext))]
-    [Migration("20230804104537_v301")]
-    partial class v301
+    [Migration("20230810145719_v303")]
+    partial class v303
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace SysEstoque.Migrations
 
             modelBuilder.Entity("SysEstoque.Models.Categoria", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -177,6 +177,7 @@ namespace SysEstoque.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FornecedorCNPJ")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("Numeracao")
@@ -367,7 +368,9 @@ namespace SysEstoque.Migrations
                 {
                     b.HasOne("SysEstoque.Models.Fornecedor", "Fornecedor")
                         .WithMany("NFs")
-                        .HasForeignKey("FornecedorCNPJ");
+                        .HasForeignKey("FornecedorCNPJ")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Fornecedor");
                 });
@@ -391,7 +394,7 @@ namespace SysEstoque.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SysEstoque.Models.Categoria", "UnidadeMedida")
+                    b.HasOne("SysEstoque.Models.UnidadeMedida", "UnidadeMedida")
                         .WithMany()
                         .HasForeignKey("UnidadeMedidaId")
                         .OnDelete(DeleteBehavior.Cascade)
