@@ -1,4 +1,4 @@
-﻿using EstoqueComEF5.Utilitarios;
+﻿using SysEstoque.Utils;
 using Microsoft.EntityFrameworkCore;
 using SysEstoque.Models;
 using System;
@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysEstoque {
-	public partial class FormMain : Form {
-		public FormMain() {
+	public partial class FormMainOld : Form {
+		public FormMainOld() {
 			InitializeComponent();
 
 			dgvProdutos.AutoGenerateColumns = false;

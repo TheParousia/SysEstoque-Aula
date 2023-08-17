@@ -1,7 +1,13 @@
+using Microsoft.VisualBasic.ApplicationServices;
 using SysEstoque.Models;
+using SysEstoque.Utils;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 
 namespace SysEstoque {
 	public partial class FormLogin : Form {
+		Thread otherThread;
 
 		Usuario usuario = new Usuario();
 
@@ -18,7 +24,10 @@ namespace SysEstoque {
 		}
 
 		private void Form1_Load(object sender, EventArgs e) {
+		}
 
+		private void openProgram(object obj) {
+			Application.Run(new FormMain());
 		}
 
 		private void btnLogar_Click(object sender, EventArgs e) {
@@ -32,11 +41,28 @@ namespace SysEstoque {
 			}
 
 			if (user != null) {
-				if(user.HashSenha == senha) {
-					this.Hide();
+				StringBuilder sb = new StringBuilder();
 
-					FormMain formMain = new FormMain();
-					formMain.Show();
+				using (SHA512 sha512 = SHA512.Create()) {
+					byte[] hasValue = sha512.ComputeHash(Encoding.UTF8.GetBytes(senha));
+
+                    foreach (var b in hasValue){
+						sb.Append($"{b:X2}");
+                    }
+
+					senha = sb.ToString();
+                }
+
+				if (user.HashSenha == senha) {
+					this.Close();
+					
+					Globais.usuarioAtual = user;
+
+					// Cria uma nova Thread
+					otherThread = new Thread(this.openProgram);
+					otherThread.SetApartmentState(ApartmentState.STA);
+					otherThread.Start();
+
 				} else {
 					MessageBox.Show("Acesso negado");
 				}

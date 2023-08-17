@@ -14,10 +14,12 @@ namespace SysEstoque
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new FormCategoria());
-            //Application.Run(new FormAddProduto());
-            Application.Run(new FormCRUDNotaEntrada());
+            //Application.Run(new FormNewProduto());
+            //Application.Run(new FormEndereco());
+            //Application.Run(new FormCRUDFornecedor());
+            //Application.Run(new FormCRUDNotaEntrada());
             //Application.Run(new FormMain());
-            //Application.Run(new FormLogin());
+            Application.Run(new FormLogin());
         }
     }
 }

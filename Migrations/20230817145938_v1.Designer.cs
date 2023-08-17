@@ -11,8 +11,8 @@ using SysEstoque.Models;
 namespace SysEstoque.Migrations
 {
     [DbContext(typeof(EstoqueContext))]
-    [Migration("20230810145719_v303")]
-    partial class v303
+    [Migration("20230817145938_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,13 +24,13 @@ namespace SysEstoque.Migrations
 
             modelBuilder.Entity("FornecedorProduto", b =>
                 {
-                    b.Property<string>("fornecedoresCNPJ")
+                    b.Property<string>("FornecedoresCNPJ")
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("produtosId")
                         .HasColumnType("int");
 
-                    b.HasKey("fornecedoresCNPJ", "produtosId");
+                    b.HasKey("FornecedoresCNPJ", "produtosId");
 
                     b.HasIndex("produtosId");
 
@@ -208,7 +208,7 @@ namespace SysEstoque.Migrations
                     b.Property<float>("ValorTotal")
                         .HasColumnType("float");
 
-                    b.Property<int>("almoxarifeResposavelid")
+                    b.Property<int?>("almoxarifeResposavelid")
                         .HasColumnType("int");
 
                     b.HasKey("IdNotaSaida");
@@ -229,6 +229,15 @@ namespace SysEstoque.Migrations
 
                     b.Property<float>("Estoque")
                         .HasColumnType("float");
+
+                    b.Property<double>("EstoqueMaximo")
+                        .HasColumnType("double");
+
+                    b.Property<double>("EstoqueMedio")
+                        .HasColumnType("double");
+
+                    b.Property<double>("EstoqueMinimo")
+                        .HasColumnType("double");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -275,9 +284,15 @@ namespace SysEstoque.Migrations
                     b.Property<string>("Login")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("EhMaster")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("EnderecoId")
+                        .HasColumnType("int");
 
                     b.Property<string>("HashSenha")
                         .IsRequired()
@@ -297,6 +312,8 @@ namespace SysEstoque.Migrations
 
                     b.HasKey("Login");
 
+                    b.HasIndex("EnderecoId");
+
                     b.ToTable("Usuario");
                 });
 
@@ -304,7 +321,7 @@ namespace SysEstoque.Migrations
                 {
                     b.HasOne("SysEstoque.Models.Fornecedor", null)
                         .WithMany()
-                        .HasForeignKey("fornecedoresCNPJ")
+                        .HasForeignKey("FornecedoresCNPJ")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -379,9 +396,7 @@ namespace SysEstoque.Migrations
                 {
                     b.HasOne("SysEstoque.Models.Almoxarife", "almoxarifeResposavel")
                         .WithMany()
-                        .HasForeignKey("almoxarifeResposavelid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("almoxarifeResposavelid");
 
                     b.Navigation("almoxarifeResposavel");
                 });
@@ -403,6 +418,15 @@ namespace SysEstoque.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("UnidadeMedida");
+                });
+
+            modelBuilder.Entity("SysEstoque.Models.Usuario", b =>
+                {
+                    b.HasOne("SysEstoque.Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoId");
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("SysEstoque.Models.Fornecedor", b =>

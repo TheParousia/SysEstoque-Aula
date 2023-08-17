@@ -15,6 +15,10 @@ namespace SysEstoque.Models {
 
         public float Estoque { get; set; }
 
+		public double EstoqueMinimo { get; set; }
+		public double EstoqueMedio { get; set; }
+		public double EstoqueMaximo { get; set; }
+
 
 
         [ForeignKey(nameof(Categoria))]
@@ -39,6 +43,6 @@ namespace SysEstoque.Models {
 
 		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; }
 
-        public ICollection<Fornecedor>? fornecedores { get; set; }
+        public ICollection<Fornecedor>? Fornecedores { get; set; }
 	}
 }

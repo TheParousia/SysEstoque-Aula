@@ -8,8 +8,8 @@ namespace SysEstoque.Models {
 		public int IdNotaSaida { get; set; }
 		public float ValorTotal { get; set; }
 		public DateTime DataEmicao { get; set; } = DateTime.Now;
-		public Almoxarife almoxarifeResposavel { get; set; } = new Almoxarife();
-		public ICollection<ItemNotaSaida> ItensNotaSaida { get; set; } = new List<ItemNotaSaida>();
-		public ICollection<Produto> ProdutosSaida { get; set; } = new List<Produto>();
+		public Almoxarife? almoxarifeResposavel { get; set; }
+		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; } = new List<ItemNotaSaida>();
+		public ICollection<Produto>? ProdutosSaida { get; set; } = new List<Produto>();
 	}
 }

@@ -1,5 +1,5 @@
 ﻿namespace SysEstoque {
-	partial class FormMain {
+	partial class FormMainOld {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>

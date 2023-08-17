@@ -2,11 +2,37 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using SysEstoque.Utils;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.VisualBasic.ApplicationServices;
+using static System.Windows.Forms.LinkLabel;
 
 namespace SysEstoque.Models {
 	public class EstoqueContext : DbContext {
-        // Cadastrando para EFCore a classe que vai
+		// Cadastrando para EFCore a classe que vai
 		// se transformar em tabela no banco de dados
+
+		//public static readonly ILoggerFactory loggerFactory = new LoggerFactory().AddConsole((_, ___) => true);
+
+
+		/*
+		public static readonly ILoggerFactory loggerFactory = new LoggerFactory(
+		new[] {
+				 new ConsoleLoggerProvider((cat, lrv) => {true, true})
+			 }
+		);
+		*/
+
+		public static readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => {
+			builder.AddFilter("Microsoft", LogLevel.Warning)
+				   .AddFilter("System", LogLevel.Warning)
+				   .AddFilter("SampleApp.Program", LogLevel.Debug)
+				   .AddConsole();
+		});
+
+		public EstoqueContext():base(){
+		}
+
 		public DbSet<Usuario> Usuario { get; set; }
 		public DbSet<NotaEntrada> NotsaEntrada { get; set; }
 
@@ -27,16 +53,11 @@ namespace SysEstoque.Models {
 
 		//Método subrescrito para configurar a conexão ao inicia o sistema
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
-			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022");
+			options.UseMySQL(Globais.DBString);
 
-			/*
 			options
 				.EnableSensitiveDataLogging(true)
-				.UseLoggerFactory(new LoggerFactory().AddConsole(
-					(category, level) =>
-						level == LogLevel.Information && category == DbLoggerCategory.Database.Name == true)
-				);
-			*/
+				.UseLoggerFactory(loggerFactory);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {

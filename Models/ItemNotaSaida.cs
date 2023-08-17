@@ -10,12 +10,12 @@ namespace SysEstoque.Models {
 		[ForeignKey(nameof(NotaSaida))]
 		[Required]
 		public int NotaSaidaId { get; set; }
-		public NotaSaida NotaSaida;
+		public NotaSaida? NotaSaida;
 
 		[ForeignKey(nameof(Produto))]
 		[Required]
 		public int ProdutoId { get; set; }
-		public Produto Produto;
+		public Produto? Produto;
 		
 		public int Quantidade { get; set; }
 	}

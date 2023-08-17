@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstoqueComEF5.Utilitarios {
+namespace SysEstoque.Utils {
 	public static class BindProperty {
 		public static string resolve(object property, string propertyName) {
 				string retValue = "";
