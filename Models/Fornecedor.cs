@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SysEstoque.Models{
-    public class Fornecedor{
+namespace SysEstoque.Models {
+    public class Fornecedor {
         [Key]
         public string CNPJ { get; set; }
         public string? NomeFantasia { get; set; }

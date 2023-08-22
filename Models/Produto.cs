@@ -7,7 +7,7 @@ namespace SysEstoque.Models {
     public class Produto {
         [Key]
         public int? Id { get; set; }
-        
+
         [MaxLength(70)]
         public string Nome { get; set; }
 
@@ -32,13 +32,13 @@ namespace SysEstoque.Models {
 
         //CONFIGURAÇÃO DE FK NOTA DE ENTRADA
         public ICollection<ItemNotaEntrada>? ItensNotaEntrada { get; set; }
-        
+
         public ICollection<NotaEntrada>? NotasEntrada { get; set; }
-		
+
         public ICollection<NotaSaida>? NotasSaida { get; set; }
 
-		public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; }
+        public ICollection<ItemNotaSaida>? ItensNotaSaida { get; set; }
 
         public ICollection<Fornecedor>? fornecedores { get; set; }
-	}
+    }
 }

@@ -21,10 +21,13 @@ namespace SysEstoque.Models {
 
             using (var db = new EstoqueContext()) {
 
+
                 cbxCategorias.DataSource = db.Categorias.ToList();
                 cbxCategorias.DisplayMember = "Nome";
                 cbxCategorias.ValueMember = "Id";
                 cbxCategorias.SelectedIndex = -1;
+
+
 
                 cbxUnidadesMedida.DataSource = db.UnidadesMedida.ToList();
                 cbxUnidadesMedida.DisplayMember = "Nome";
@@ -55,9 +58,9 @@ namespace SysEstoque.Models {
         }
 
         private void dgvProdutos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
-           if ((dgvProdutos.Rows[e.RowIndex].DataBoundItem != null) && (dgvProdutos.Columns[e.ColumnIndex].DataPropertyName.Contains("."))) {
+            if ((dgvProdutos.Rows[e.RowIndex].DataBoundItem != null) && (dgvProdutos.Columns[e.ColumnIndex].DataPropertyName.Contains("."))) {
                 e.Value = BindProperty.resolve(dgvProdutos.Rows[e.RowIndex].DataBoundItem, dgvProdutos.Columns[e.ColumnIndex].DataPropertyName);
-           }
+            }
         }
     }
 }

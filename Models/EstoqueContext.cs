@@ -27,7 +27,7 @@ namespace SysEstoque.Models {
 
 		//Método subrescrito para configurar a conexão ao inicia o sistema
 		protected override void OnConfiguring(DbContextOptionsBuilder options) {
-			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022");
+			options.UseMySQL("Server=127.0.0.1;port=3306;database=estoque;uid=user_estoque;password=#Root2022");
 
 			/*
 			options

@@ -132,10 +132,13 @@
             // 
             // dgvProdutos
             // 
+            dgvProdutos.AllowUserToAddRows = false;
+            dgvProdutos.AllowUserToDeleteRows = false;
             dgvProdutos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProdutos.Columns.AddRange(new DataGridViewColumn[] { Id, Nome, Preco, Estoque, UnidadeMedida, Categoria });
             dgvProdutos.Location = new Point(12, 320);
             dgvProdutos.Name = "dgvProdutos";
+            dgvProdutos.ReadOnly = true;
             dgvProdutos.RowHeadersWidth = 51;
             dgvProdutos.RowTemplate.Height = 29;
             dgvProdutos.Size = new Size(867, 183);
@@ -148,6 +151,7 @@
             Id.HeaderText = "Id";
             Id.MinimumWidth = 6;
             Id.Name = "Id";
+            Id.ReadOnly = true;
             Id.Width = 125;
             // 
             // Nome
@@ -156,6 +160,7 @@
             Nome.HeaderText = "Nome";
             Nome.MinimumWidth = 6;
             Nome.Name = "Nome";
+            Nome.ReadOnly = true;
             Nome.Width = 125;
             // 
             // Preco
@@ -164,6 +169,7 @@
             Preco.HeaderText = "Preço";
             Preco.MinimumWidth = 6;
             Preco.Name = "Preco";
+            Preco.ReadOnly = true;
             Preco.Width = 125;
             // 
             // Estoque
@@ -172,6 +178,7 @@
             Estoque.HeaderText = "Estoque";
             Estoque.MinimumWidth = 6;
             Estoque.Name = "Estoque";
+            Estoque.ReadOnly = true;
             Estoque.Width = 125;
             // 
             // UnidadeMedida
@@ -180,6 +187,7 @@
             UnidadeMedida.HeaderText = "UnidadeMedida";
             UnidadeMedida.MinimumWidth = 6;
             UnidadeMedida.Name = "UnidadeMedida";
+            UnidadeMedida.ReadOnly = true;
             UnidadeMedida.Width = 125;
             // 
             // Categoria
@@ -188,6 +196,7 @@
             Categoria.HeaderText = "Categoria";
             Categoria.MinimumWidth = 6;
             Categoria.Name = "Categoria";
+            Categoria.ReadOnly = true;
             Categoria.Width = 125;
             // 
             // label2
