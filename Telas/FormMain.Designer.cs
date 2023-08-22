@@ -69,6 +69,7 @@
 			manualDoUsuárioToolStripMenuItem = new ToolStripMenuItem();
 			sobreOSistemaToolStripMenuItem = new ToolStripMenuItem();
 			contatoComOsDesenvolvedoresToolStripMenuItem = new ToolStripMenuItem();
+			inserirNotaDeEntradaToolStripMenuItem = new ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)dgvProdutos).BeginInit();
 			panel1.SuspendLayout();
 			panel2.SuspendLayout();
@@ -388,18 +389,21 @@
 			criaNovoProdutoToolStripMenuItem.Name = "criaNovoProdutoToolStripMenuItem";
 			criaNovoProdutoToolStripMenuItem.Size = new Size(182, 22);
 			criaNovoProdutoToolStripMenuItem.Text = "Cria novo produto";
+			criaNovoProdutoToolStripMenuItem.Click += criaNovoProdutoToolStripMenuItem_Click;
 			// 
 			// categoriasToolStripMenuItem
 			// 
 			categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
 			categoriasToolStripMenuItem.Size = new Size(182, 22);
 			categoriasToolStripMenuItem.Text = "Categorias";
+			categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
 			// 
 			// unidadesDeMedidaToolStripMenuItem
 			// 
 			unidadesDeMedidaToolStripMenuItem.Name = "unidadesDeMedidaToolStripMenuItem";
 			unidadesDeMedidaToolStripMenuItem.Size = new Size(182, 22);
 			unidadesDeMedidaToolStripMenuItem.Text = "Unidades de Medida";
+			unidadesDeMedidaToolStripMenuItem.Click += unidadesDeMedidaToolStripMenuItem_Click;
 			// 
 			// fornecedoresToolStripMenuItem
 			// 
@@ -413,9 +417,11 @@
 			administrarForncedoresToolStripMenuItem.Name = "administrarForncedoresToolStripMenuItem";
 			administrarForncedoresToolStripMenuItem.Size = new Size(204, 22);
 			administrarForncedoresToolStripMenuItem.Text = "Administrar Forncedores";
+			administrarForncedoresToolStripMenuItem.Click += administrarForncedoresToolStripMenuItem_Click;
 			// 
 			// notasDeEntradaToolStripMenuItem
 			// 
+			notasDeEntradaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inserirNotaDeEntradaToolStripMenuItem });
 			notasDeEntradaToolStripMenuItem.Name = "notasDeEntradaToolStripMenuItem";
 			notasDeEntradaToolStripMenuItem.Size = new Size(109, 20);
 			notasDeEntradaToolStripMenuItem.Text = "Notas de Entrada";
@@ -450,6 +456,13 @@
 			contatoComOsDesenvolvedoresToolStripMenuItem.Name = "contatoComOsDesenvolvedoresToolStripMenuItem";
 			contatoComOsDesenvolvedoresToolStripMenuItem.Size = new Size(251, 22);
 			contatoComOsDesenvolvedoresToolStripMenuItem.Text = "Contato com os Desenvolvedores";
+			// 
+			// inserirNotaDeEntradaToolStripMenuItem
+			// 
+			inserirNotaDeEntradaToolStripMenuItem.Name = "inserirNotaDeEntradaToolStripMenuItem";
+			inserirNotaDeEntradaToolStripMenuItem.Size = new Size(194, 22);
+			inserirNotaDeEntradaToolStripMenuItem.Text = "Inserir Nota de Entrada";
+			inserirNotaDeEntradaToolStripMenuItem.Click += inserirNotaDeEntradaToolStripMenuItem_Click;
 			// 
 			// FormMain
 			// 
@@ -523,5 +536,6 @@
 		private ToolStripStatusLabel barStNome;
 		private ToolStripStatusLabel toolStripStatusLabel4;
 		private ToolStripStatusLabel barStNivel;
+		private ToolStripMenuItem inserirNotaDeEntradaToolStripMenuItem;
 	}
 }

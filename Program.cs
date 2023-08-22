@@ -19,6 +19,7 @@ namespace SysEstoque
             //Application.Run(new FormCRUDFornecedor());
             //Application.Run(new FormCRUDNotaEntrada());
             //Application.Run(new FormMain());
+            //Application.Run(new FormCRUDNotaEntrada());
             Application.Run(new FormLogin());
         }
     }

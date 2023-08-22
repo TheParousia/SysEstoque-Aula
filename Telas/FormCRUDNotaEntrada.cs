@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SysEstoque.Models;
+using SysEstoque.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -57,7 +59,7 @@ namespace SysEstoque {
 			for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
 				var p = new Produto();
 				p = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
-				notaEntrada.ValorTotal += (float) (p.Preco * Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[2].Value.ToString()));
+				notaEntrada.ValorTotal += (float)(p.Preco * Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()));
 			}
 
 			using (var db = new EstoqueContext()) {
@@ -79,10 +81,10 @@ namespace SysEstoque {
 					var INE = new ItemNotaEntrada();
 					INE.ProdutoId = (int)dgvProdutoDaNota.Rows[i].Cells[0].Value;
 					INE.NotaEntradaId = notaEntrada.IdNotaEntrada;
-					INE.Quantidade = Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[2].Value.ToString()) | 1;
+					INE.Quantidade = Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()) | 1;
 
 					db.ItemNotaEntrada.Add(INE);
-					
+
 					db.SaveChanges();
 
 					INE = null;
@@ -96,7 +98,7 @@ namespace SysEstoque {
 			for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
 				var produto = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
 
-				var qtd = dgvProdutoDaNota.Rows[i].Cells[2].Value;
+				var qtd = dgvProdutoDaNota.Rows[i].Cells[4].Value;
 
 				MessageBox.Show($"Produto: {produto.Nome}\nQtd: {qtd}");
 			}
@@ -104,6 +106,38 @@ namespace SysEstoque {
 
 		private void dgvProdutoDaNota_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
+		}
+
+		private void dgvProdutoDaNota_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+			if (
+				(dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem != null) &&
+				(dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName.Contains("."))
+
+			   ) {
+
+				e.Value = BindProperty.resolve(
+							dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem,
+							dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName
+						);
+			}
+
+		}
+
+		private void dgvProdutoDaNota_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+
+		}
+
+		private void dgvProdutoDaNota_DataSourceChanged(object sender, EventArgs e) {
+
+			foreach(DataGridViewRow row in dgvProdutoDaNota.Rows) {
+				MessageBox.Show(row.Cells[4].Value.ToString());
+				
+				if (row.Cells[4].Value.ToString() == "") {
+					row.DefaultCellStyle.ForeColor = Color.Yellow;
+				} else {
+
+				}
+			}
 		}
 	}
 }

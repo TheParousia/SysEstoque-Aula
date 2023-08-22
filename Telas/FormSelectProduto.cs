@@ -1,4 +1,5 @@
-﻿using SysEstoque.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SysEstoque.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +28,9 @@ namespace SysEstoque {
 
 			//Inserção de dados
 			using (var db = new EstoqueContext()) {
-				produtosDisponiveis.DataSource = db.Produtos.ToList();
+				produtosDisponiveis.DataSource = db.Produtos
+														.Include(x => x.UnidadeMedida)
+														.ToList();
 			}
 
             for (int i = 0;i < produtosSelecionados.Count;i++) {

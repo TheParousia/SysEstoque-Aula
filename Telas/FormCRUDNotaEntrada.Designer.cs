@@ -25,6 +25,11 @@
 		private void InitializeComponent() {
 			button1 = new Button();
 			dgvProdutoDaNota = new DataGridView();
+			IdProduto = new DataGridViewTextBoxColumn();
+			NomeProduto = new DataGridViewTextBoxColumn();
+			NomeUnidadeMedida = new DataGridViewTextBoxColumn();
+			Preco = new DataGridViewTextBoxColumn();
+			QuntidadeItem = new DataGridViewTextBoxColumn();
 			txbRazaoSocial = new TextBox();
 			label1 = new Label();
 			txbNumeroNota = new TextBox();
@@ -45,7 +50,6 @@
 			btnTest = new Button();
 			Id = new DataGridViewTextBoxColumn();
 			Nome = new DataGridViewTextBoxColumn();
-			Quantidade = new DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)dgvProdutoDaNota).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -67,14 +71,51 @@
 			dgvProdutoDaNota.AllowUserToDeleteRows = false;
 			dgvProdutoDaNota.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dgvProdutoDaNota.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvProdutoDaNota.Columns.AddRange(new DataGridViewColumn[] { Id, Nome, Quantidade });
+			dgvProdutoDaNota.Columns.AddRange(new DataGridViewColumn[] { IdProduto, NomeProduto, NomeUnidadeMedida, Preco, QuntidadeItem });
 			dgvProdutoDaNota.Location = new Point(6, 50);
 			dgvProdutoDaNota.MultiSelect = false;
 			dgvProdutoDaNota.Name = "dgvProdutoDaNota";
 			dgvProdutoDaNota.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dgvProdutoDaNota.Size = new Size(764, 162);
 			dgvProdutoDaNota.TabIndex = 1;
+			dgvProdutoDaNota.DataSourceChanged += dgvProdutoDaNota_DataSourceChanged;
 			dgvProdutoDaNota.CellContentClick += dgvProdutoDaNota_CellContentClick;
+			dgvProdutoDaNota.CellFormatting += dgvProdutoDaNota_CellFormatting;
+			dgvProdutoDaNota.CellValueChanged += dgvProdutoDaNota_CellValueChanged;
+			// 
+			// IdProduto
+			// 
+			IdProduto.DataPropertyName = "Id";
+			IdProduto.HeaderText = "Id";
+			IdProduto.Name = "IdProduto";
+			IdProduto.ReadOnly = true;
+			// 
+			// NomeProduto
+			// 
+			NomeProduto.DataPropertyName = "Nome";
+			NomeProduto.HeaderText = "Nome";
+			NomeProduto.Name = "NomeProduto";
+			NomeProduto.ReadOnly = true;
+			// 
+			// NomeUnidadeMedida
+			// 
+			NomeUnidadeMedida.DataPropertyName = "UnidadeMedida.Nome";
+			NomeUnidadeMedida.HeaderText = "Unid. Medida";
+			NomeUnidadeMedida.Name = "NomeUnidadeMedida";
+			NomeUnidadeMedida.ReadOnly = true;
+			// 
+			// Preco
+			// 
+			Preco.DataPropertyName = "Preco";
+			Preco.HeaderText = "Val. R$";
+			Preco.Name = "Preco";
+			Preco.ReadOnly = true;
+			// 
+			// QuntidadeItem
+			// 
+			QuntidadeItem.DataPropertyName = "Quantidade";
+			QuntidadeItem.HeaderText = "Qtd";
+			QuntidadeItem.Name = "QuntidadeItem";
 			// 
 			// txbRazaoSocial
 			// 
@@ -250,6 +291,7 @@
 			Id.HeaderText = "IdProduto";
 			Id.Name = "Id";
 			Id.ReadOnly = true;
+			Id.Width = 240;
 			// 
 			// Nome
 			// 
@@ -257,12 +299,7 @@
 			Nome.HeaderText = "Nome";
 			Nome.Name = "Nome";
 			Nome.ReadOnly = true;
-			// 
-			// Quantidade
-			// 
-			Quantidade.DataPropertyName = "Quantidade";
-			Quantidade.HeaderText = "Qtd.";
-			Quantidade.Name = "Quantidade";
+			Nome.Width = 241;
 			// 
 			// FormCRUDNotaEntrada
 			// 
@@ -312,6 +349,10 @@
 		private Button btnTest;
 		private DataGridViewTextBoxColumn Id;
 		private DataGridViewTextBoxColumn Nome;
-		private DataGridViewTextBoxColumn Quantidade;
+		private DataGridViewTextBoxColumn IdProduto;
+		private DataGridViewTextBoxColumn NomeProduto;
+		private DataGridViewTextBoxColumn NomeUnidadeMedida;
+		private DataGridViewTextBoxColumn Preco;
+		private DataGridViewTextBoxColumn QuntidadeItem;
 	}
 }

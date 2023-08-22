@@ -11,13 +11,10 @@ using MessageUtils;
 namespace SysEstoque {
 	public partial class FormMain : Form {
 
-
-
-
 		internal Produto produtoSelecionado;
 
 		public FormMain() {
-						
+
 			InitializeComponent();
 
 			barStNome.Text = Globais.usuarioAtual.Nome;
@@ -320,6 +317,39 @@ namespace SysEstoque {
 				FormNewProduto formNewProduto = new FormNewProduto(lerProduto: produtoSelecionado);
 				formNewProduto.ShowDialog();
 			}
+		}
+
+		private void criaNovoProdutoToolStripMenuItem_Click(object sender, EventArgs e) {
+			FormAddProduto formAddProduto = new FormAddProduto();
+			formAddProduto.Owner = this;
+			formAddProduto.ShowDialog();
+
+			// Código provisório
+			using (var db = new EstoqueContext()) {
+				this.GetAllProduct(db);
+			}
+		}
+
+		private void categoriasToolStripMenuItem_Click(object sender, EventArgs e) {
+			FormCategoria formCategoria = new FormCategoria();
+			formCategoria.Owner = this;
+			formCategoria.ShowDialog();
+		}
+
+		private void unidadesDeMedidaToolStripMenuItem_Click(object sender, EventArgs e) {
+			FormAdmUnidMedida formAdmUnidMedida = new FormAdmUnidMedida();
+			formAdmUnidMedida.Owner = this;
+			formAdmUnidMedida.ShowDialog();
+		}
+
+		private void administrarForncedoresToolStripMenuItem_Click(object sender, EventArgs e) {
+			FormCRUDFornecedor formCRUDFornecedor = new FormCRUDFornecedor();
+			formCRUDFornecedor.Owner = this;
+			formCRUDFornecedor.ShowDialog();
+		}
+
+		private void inserirNotaDeEntradaToolStripMenuItem_Click(object sender, EventArgs e) {
+			
 		}
 	}
 }
