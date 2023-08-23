@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySqlX.XDevAPI.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -27,6 +28,52 @@ namespace SysEstoque.Models {
 			}
 		}
 
+		private bool ValdarCampo() {
+			bool formValidado = true;
+
+			string erroMsg = "Esses campos deve ser preenchidos: ";
+
+			if (txbNome.Text == "") {
+				formValidado = false;
+
+				erroMsg += "nome ";
+
+				txbNome.BackColor = Color.Red;
+			}
+			
+			if (txbDescricao.Text == "") {
+				formValidado = false;
+
+				erroMsg += "descricao";
+
+				txbDescricao.BackColor = Color.Red;
+			}
+
+			if (!formValidado) {
+				statusMsg.Text = erroMsg;
+			}
+
+			SetDefaultState();
+
+			return formValidado;
+		}
+
+		private async Task<bool> SetDefaultState() {
+			bool result = true;
+			try {
+				await Task.Delay(3000);
+
+				statusMsg.Text = "";
+				txbNome.BackColor = Color.White;
+				txbDescricao.BackColor = Color.White;
+
+			} catch (Exception erro) {
+				MessageBox.Show(erro.Message);
+				result = false;
+			}
+
+			return result;
+		}
 		private void textBox1_TextChanged(object sender, EventArgs e) {
 
 		}
@@ -76,6 +123,11 @@ namespace SysEstoque.Models {
 		}
 
 		private void btnSalvar_Click(object sender, EventArgs e) {
+			
+			if(!ValdarCampo()){
+				return;
+			}
+
 			if (txbId.Text != "") {
 				categoria.Id = Convert.ToInt32(txbId.Text);
 				categoria.Nome = txbNome.Text;
