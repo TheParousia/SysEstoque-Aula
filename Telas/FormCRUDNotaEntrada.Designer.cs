@@ -23,13 +23,10 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+			DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
 			button1 = new Button();
 			dgvProdutoDaNota = new DataGridView();
-			IdProduto = new DataGridViewTextBoxColumn();
-			NomeProduto = new DataGridViewTextBoxColumn();
-			NomeUnidadeMedida = new DataGridViewTextBoxColumn();
-			Preco = new DataGridViewTextBoxColumn();
-			QuntidadeItem = new DataGridViewTextBoxColumn();
 			txbRazaoSocial = new TextBox();
 			label1 = new Label();
 			txbNumeroNota = new TextBox();
@@ -50,6 +47,14 @@
 			btnTest = new Button();
 			Id = new DataGridViewTextBoxColumn();
 			Nome = new DataGridViewTextBoxColumn();
+			lblValorTotal = new Label();
+			label9 = new Label();
+			IdProduto = new DataGridViewTextBoxColumn();
+			NomeProduto = new DataGridViewTextBoxColumn();
+			NomeUnidadeMedida = new DataGridViewTextBoxColumn();
+			Preco = new DataGridViewTextBoxColumn();
+			QuntidadeItem = new DataGridViewTextBoxColumn();
+			SubTotal = new DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)dgvProdutoDaNota).BeginInit();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
@@ -71,7 +76,7 @@
 			dgvProdutoDaNota.AllowUserToDeleteRows = false;
 			dgvProdutoDaNota.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dgvProdutoDaNota.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dgvProdutoDaNota.Columns.AddRange(new DataGridViewColumn[] { IdProduto, NomeProduto, NomeUnidadeMedida, Preco, QuntidadeItem });
+			dgvProdutoDaNota.Columns.AddRange(new DataGridViewColumn[] { IdProduto, NomeProduto, NomeUnidadeMedida, Preco, QuntidadeItem, SubTotal });
 			dgvProdutoDaNota.Location = new Point(6, 50);
 			dgvProdutoDaNota.MultiSelect = false;
 			dgvProdutoDaNota.Name = "dgvProdutoDaNota";
@@ -80,42 +85,9 @@
 			dgvProdutoDaNota.TabIndex = 1;
 			dgvProdutoDaNota.DataSourceChanged += dgvProdutoDaNota_DataSourceChanged;
 			dgvProdutoDaNota.CellContentClick += dgvProdutoDaNota_CellContentClick;
+			dgvProdutoDaNota.CellEndEdit += dgvProdutoDaNota_CellEndEdit;
 			dgvProdutoDaNota.CellFormatting += dgvProdutoDaNota_CellFormatting;
 			dgvProdutoDaNota.CellValueChanged += dgvProdutoDaNota_CellValueChanged;
-			// 
-			// IdProduto
-			// 
-			IdProduto.DataPropertyName = "Id";
-			IdProduto.HeaderText = "Id";
-			IdProduto.Name = "IdProduto";
-			IdProduto.ReadOnly = true;
-			// 
-			// NomeProduto
-			// 
-			NomeProduto.DataPropertyName = "Nome";
-			NomeProduto.HeaderText = "Nome";
-			NomeProduto.Name = "NomeProduto";
-			NomeProduto.ReadOnly = true;
-			// 
-			// NomeUnidadeMedida
-			// 
-			NomeUnidadeMedida.DataPropertyName = "UnidadeMedida.Nome";
-			NomeUnidadeMedida.HeaderText = "Unid. Medida";
-			NomeUnidadeMedida.Name = "NomeUnidadeMedida";
-			NomeUnidadeMedida.ReadOnly = true;
-			// 
-			// Preco
-			// 
-			Preco.DataPropertyName = "Preco";
-			Preco.HeaderText = "Val. R$";
-			Preco.Name = "Preco";
-			Preco.ReadOnly = true;
-			// 
-			// QuntidadeItem
-			// 
-			QuntidadeItem.DataPropertyName = "Quantidade";
-			QuntidadeItem.HeaderText = "Qtd";
-			QuntidadeItem.Name = "QuntidadeItem";
 			// 
 			// txbRazaoSocial
 			// 
@@ -128,22 +100,23 @@
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Location = new Point(321, 9);
+			label1.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+			label1.Location = new Point(306, 9);
 			label1.Name = "label1";
-			label1.Size = new Size(141, 15);
+			label1.Size = new Size(215, 25);
 			label1.TabIndex = 3;
 			label1.Text = "Registrar Nota de Entrada";
 			// 
 			// txbNumeroNota
 			// 
-			txbNumeroNota.Location = new Point(90, 51);
+			txbNumeroNota.Location = new Point(90, 68);
 			txbNumeroNota.Name = "txbNumeroNota";
 			txbNumeroNota.Size = new Size(100, 23);
 			txbNumeroNota.TabIndex = 2;
 			// 
 			// txbSerieNE
 			// 
-			txbSerieNE.Location = new Point(266, 51);
+			txbSerieNE.Location = new Point(266, 68);
 			txbSerieNE.Name = "txbSerieNE";
 			txbSerieNE.Size = new Size(100, 23);
 			txbSerieNE.TabIndex = 2;
@@ -151,7 +124,7 @@
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(12, 54);
+			label2.Location = new Point(12, 71);
 			label2.Name = "label2";
 			label2.Size = new Size(72, 15);
 			label2.TabIndex = 3;
@@ -168,7 +141,7 @@
 			groupBox1.Controls.Add(button1);
 			groupBox1.Controls.Add(txbNomeFantasia);
 			groupBox1.Controls.Add(txbRazaoSocial);
-			groupBox1.Location = new Point(12, 104);
+			groupBox1.Location = new Point(12, 118);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(776, 128);
 			groupBox1.TabIndex = 4;
@@ -237,7 +210,7 @@
 			// 
 			// btnAddNE
 			// 
-			btnAddNE.Location = new Point(634, 486);
+			btnAddNE.Location = new Point(634, 525);
 			btnAddNE.Name = "btnAddNE";
 			btnAddNE.Size = new Size(131, 23);
 			btnAddNE.TabIndex = 0;
@@ -249,7 +222,7 @@
 			// 
 			groupBox2.Controls.Add(dgvProdutoDaNota);
 			groupBox2.Controls.Add(btnInserirProduto);
-			groupBox2.Location = new Point(12, 252);
+			groupBox2.Location = new Point(12, 274);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(776, 228);
 			groupBox2.TabIndex = 5;
@@ -269,7 +242,7 @@
 			// label7
 			// 
 			label7.AutoSize = true;
-			label7.Location = new Point(213, 54);
+			label7.Location = new Point(213, 71);
 			label7.Name = "label7";
 			label7.Size = new Size(35, 15);
 			label7.TabIndex = 3;
@@ -277,7 +250,7 @@
 			// 
 			// btnTest
 			// 
-			btnTest.Location = new Point(461, 486);
+			btnTest.Location = new Point(461, 525);
 			btnTest.Name = "btnTest";
 			btnTest.Size = new Size(131, 23);
 			btnTest.TabIndex = 0;
@@ -301,15 +274,82 @@
 			Nome.ReadOnly = true;
 			Nome.Width = 241;
 			// 
+			// lblValorTotal
+			// 
+			lblValorTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+			lblValorTotal.Location = new Point(648, 59);
+			lblValorTotal.Name = "lblValorTotal";
+			lblValorTotal.Size = new Size(134, 32);
+			lblValorTotal.TabIndex = 3;
+			lblValorTotal.Text = "R$";
+			lblValorTotal.TextAlign = ContentAlignment.MiddleLeft;
+			// 
+			// label9
+			// 
+			label9.AutoSize = true;
+			label9.Location = new Point(578, 59);
+			label9.Name = "label9";
+			label9.Size = new Size(64, 15);
+			label9.TabIndex = 3;
+			label9.Text = "Valor Total:";
+			// 
+			// IdProduto
+			// 
+			IdProduto.DataPropertyName = "Id";
+			IdProduto.HeaderText = "Id";
+			IdProduto.Name = "IdProduto";
+			IdProduto.ReadOnly = true;
+			// 
+			// NomeProduto
+			// 
+			NomeProduto.DataPropertyName = "Nome";
+			NomeProduto.HeaderText = "Nome";
+			NomeProduto.Name = "NomeProduto";
+			NomeProduto.ReadOnly = true;
+			// 
+			// NomeUnidadeMedida
+			// 
+			NomeUnidadeMedida.DataPropertyName = "UnidadeMedida.Nome";
+			NomeUnidadeMedida.HeaderText = "Unid. Medida";
+			NomeUnidadeMedida.Name = "NomeUnidadeMedida";
+			NomeUnidadeMedida.ReadOnly = true;
+			// 
+			// Preco
+			// 
+			Preco.DataPropertyName = "Preco";
+			Preco.HeaderText = "Val. R$";
+			Preco.Name = "Preco";
+			Preco.ReadOnly = true;
+			// 
+			// QuntidadeItem
+			// 
+			QuntidadeItem.DataPropertyName = "Quantidade";
+			dataGridViewCellStyle1.NullValue = "0";
+			QuntidadeItem.DefaultCellStyle = dataGridViewCellStyle1;
+			QuntidadeItem.HeaderText = "Qtd";
+			QuntidadeItem.Name = "QuntidadeItem";
+			// 
+			// SubTotal
+			// 
+			dataGridViewCellStyle2.Format = "C2";
+			dataGridViewCellStyle2.NullValue = "0";
+			SubTotal.DefaultCellStyle = dataGridViewCellStyle2;
+			SubTotal.HeaderText = "Sub. Total";
+			SubTotal.Name = "SubTotal";
+			SubTotal.ReadOnly = true;
+			SubTotal.ToolTipText = "Valor total da compra dessa mercadoria especifica";
+			// 
 			// FormCRUDNotaEntrada
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 530);
+			ClientSize = new Size(800, 560);
 			Controls.Add(groupBox2);
 			Controls.Add(btnTest);
 			Controls.Add(btnAddNE);
 			Controls.Add(groupBox1);
+			Controls.Add(label9);
+			Controls.Add(lblValorTotal);
 			Controls.Add(label7);
 			Controls.Add(label2);
 			Controls.Add(label1);
@@ -349,10 +389,13 @@
 		private Button btnTest;
 		private DataGridViewTextBoxColumn Id;
 		private DataGridViewTextBoxColumn Nome;
+		private Label lblValorTotal;
+		private Label label9;
 		private DataGridViewTextBoxColumn IdProduto;
 		private DataGridViewTextBoxColumn NomeProduto;
 		private DataGridViewTextBoxColumn NomeUnidadeMedida;
 		private DataGridViewTextBoxColumn Preco;
 		private DataGridViewTextBoxColumn QuntidadeItem;
+		private DataGridViewTextBoxColumn SubTotal;
 	}
 }

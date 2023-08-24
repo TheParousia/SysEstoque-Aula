@@ -20,11 +20,11 @@ namespace SysEstoque {
 
 			using (var db = new EstoqueContext()) {
 				if (db.Database.CanConnect()) {
-					MessageBox.Show("Pode conectar");
+					//MessageBox.Show("Pode conectar");
 					MessageBeep(BeepType.IconExclamation);
 				} else {
 					MessageBeep(BeepType.IconAsterisk);
-					MessageBox.Show("Não pode conectar");
+					//MessageBox.Show("Não pode conectar");
 				}
 			}
 		}

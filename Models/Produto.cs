@@ -13,6 +13,7 @@ namespace SysEstoque.Models {
 
         public double Preco { get; set; }
 
+
         public float Estoque { get; set; }
 
 		public double EstoqueMinimo { get; set; }
@@ -27,7 +28,7 @@ namespace SysEstoque.Models {
 
         [ForeignKey(nameof(UnidadeMedida))]
         public int UnidadeMedidaId { get; set; }
-        public UnidadeMedida? UnidadeMedida { get; set; } = new UnidadeMedida();
+        public UnidadeMedida? UnidadeMedida { get; set; }
 
 
         // Modo errado

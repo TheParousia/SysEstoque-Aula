@@ -14,8 +14,8 @@ namespace SysEstoque.Models {
 		public float ValorTotal { get; set; }
 		public DateTime DataEmicao { get; set; } = DateTime.Now;
 
-		public ICollection<ItemNotaEntrada>? ItensNotaEntrada { get; set; } = new List<ItemNotaEntrada>();
+		public ICollection<ItemNotaEntrada>? ItensNotaEntrada { get; set; }
 
-		public ICollection<Produto>? ProdutosEntrada { get; set; } = new List<Produto>();
+		public ICollection<Produto>? ProdutosEntrada { get; set; }
 	}
 }

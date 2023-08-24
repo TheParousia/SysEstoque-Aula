@@ -349,7 +349,9 @@ namespace SysEstoque {
 		}
 
 		private void inserirNotaDeEntradaToolStripMenuItem_Click(object sender, EventArgs e) {
-			
+			FormCRUDNotaEntrada formCRUDNotaEntrada = new FormCRUDNotaEntrada();
+			formCRUDNotaEntrada.Owner = this;
+			formCRUDNotaEntrada.ShowDialog();
 		}
 	}
 }

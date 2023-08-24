@@ -123,21 +123,59 @@ namespace SysEstoque {
 
 		}
 
-		private void dgvProdutoDaNota_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
 
+		private void updateDgv(DataGridViewCellEventArgs e) {
+			try {
+				// Veririca se a linha e a coluna em que se deseja editar está
+				// está na vez
+				if (e.RowIndex != -1 && e.ColumnIndex == 4) {
+					
+					//Pega o valor do dataGridView para ser calculado
+					double valorUnid = Convert.ToDouble(dgvProdutoDaNota.Rows[e.RowIndex].Cells[3].Value);
+					double qtd = Convert.ToInt32(dgvProdutoDaNota.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+
+					double subTotalProduto = valorUnid * qtd;
+
+					// Coloca o valor total na ultima celula
+					dgvProdutoDaNota.Rows[e.RowIndex].Cells[5].Value = subTotalProduto;
+
+					// Calcula o valor total
+					double valorTotal = 0;
+
+					foreach (DataGridViewRow rowSubTotProd in dgvProdutoDaNota.Rows) {
+						valorTotal += Convert.ToDouble(rowSubTotProd.Cells["SubTotal"].Value);
+					}
+					
+					// Atualiza o valor total
+					lblValorTotal.Text = $"R$ {valorTotal:C2}";
+
+				} else {
+					Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
+				}
+
+			} catch (Exception erro) {
+				Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
+				Debug.WriteLine(erro.Message);
+			}
+		}
+
+		private void dgvProdutoDaNota_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+			updateDgv(e);
 		}
 
 		private void dgvProdutoDaNota_DataSourceChanged(object sender, EventArgs e) {
 
-			foreach(DataGridViewRow row in dgvProdutoDaNota.Rows) {
+			foreach (DataGridViewRow row in dgvProdutoDaNota.Rows) {
 				MessageBox.Show(row.Cells[4].Value.ToString());
-				
+
 				if (row.Cells[4].Value.ToString() == "") {
 					row.DefaultCellStyle.ForeColor = Color.Yellow;
-				} else {
-
 				}
 			}
+		}
+
+		private void dgvProdutoDaNota_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+
 		}
 	}
 }

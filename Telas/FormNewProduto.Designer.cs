@@ -63,6 +63,7 @@
 			// btnProdSalvar
 			// 
 			btnProdSalvar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+			btnProdSalvar.DialogResult = DialogResult.OK;
 			btnProdSalvar.Location = new Point(713, 560);
 			btnProdSalvar.Name = "btnProdSalvar";
 			btnProdSalvar.Size = new Size(75, 23);
