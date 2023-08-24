@@ -28,35 +28,19 @@ namespace SysEstoque.Models {
 			}
 		}
 
-		private bool ValdarCampo() {
-			bool formValidado = true;
-
+		/*
 			string erroMsg = "Esses campos deve ser preenchidos: ";
-
-			if (txbNome.Text == "") {
-				formValidado = false;
-
 				erroMsg += "nome ";
-
-				txbNome.BackColor = Color.Red;
-			}
-			
-			if (txbDescricao.Text == "") {
-				formValidado = false;
-
 				erroMsg += "descricao";
-
-				txbDescricao.BackColor = Color.Red;
-			}
-
 			if (!formValidado) {
 				statusMsg.Text = erroMsg;
 			}
+		*/
 
-			SetDefaultState();
 
-			return formValidado;
-		}
+
+
+
 
 		private async Task<bool> SetDefaultState() {
 			bool result = true;
@@ -96,20 +80,14 @@ namespace SysEstoque.Models {
 					statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
 					statusMsg.ForeColor = Color.Red;
 
-					Task.Delay(2000).ContinueWith((task) => {
-						statusMsg.Text = "";
-						statusMsg.ForeColor = Color.Red;
-					});
-				}
+                    SetDefaultState();
+                }
 			} else {
 				statusMsg.Text = "Você deve selecionar uma linha para exclui-la";
 				statusMsg.ForeColor = Color.Red;
 
-				Task.Delay(5000).ContinueWith((task) => {
-					statusMsg.Text = "";
-					statusMsg.ForeColor = Color.Red;
-				});
-			}
+                SetDefaultState();
+            }
 		}
 
 		private void btnAtualizar_Click(object sender, EventArgs e) {
@@ -122,9 +100,29 @@ namespace SysEstoque.Models {
 			}
 		}
 
-		private void btnSalvar_Click(object sender, EventArgs e) {
+        private bool ValidarCampo() {
+            bool formValidado = true;
+
+            if (txbNome.Text == "") {
+                formValidado = false;
+
+                txbNome.BackColor = Color.Red;
+            }
+
+            if (txbDescricao.Text == "") {
+                formValidado = false;
+
+                txbDescricao.BackColor = Color.Red;
+            }
+
+            //SetDefaultState();
+
+            return formValidado;
+        }
+
+        private void btnSalvar_Click(object sender, EventArgs e) {
 			
-			if(!ValdarCampo()){
+			if( !ValidarCampo() ){
 				return;
 			}
 

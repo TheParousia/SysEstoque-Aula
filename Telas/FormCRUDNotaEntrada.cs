@@ -13,169 +13,170 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysEstoque {
-	public partial class FormCRUDNotaEntrada : Form {
-		public static Fornecedor fornecedor { get; set; }
+    public partial class FormCRUDNotaEntrada : Form {
+        public static ICollection<Produto> produtos { get; set; } = new List<Produto>();
+        public static BindingSource? sourceProdutos { get; set; } = new BindingSource();
+        public static Fornecedor fornecedor { get; set; }
+        private NotaEntrada notaEntrada { get; set; } = new NotaEntrada();
 
-		public static ICollection<Produto> produtos { get; set; } = new List<Produto>();
+        public FormCRUDNotaEntrada() {
+            InitializeComponent();
 
-		public static BindingSource? sourceProdutos { get; set; } = new BindingSource();
+            dgvProdutoDaNota.AutoGenerateColumns = false;
+            sourceProdutos.DataSource = produtos;
+            dgvProdutoDaNota.DataSource = sourceProdutos;
+        }
 
-		private NotaEntrada notaEntrada { get; set; } = new NotaEntrada();
+        private void button1_Click(object sender, EventArgs e) {
+            FormListaFornecedores formListaFornecedores = new FormListaFornecedores();
+            formListaFornecedores.ShowDialog();
 
-		public FormCRUDNotaEntrada() {
-			InitializeComponent();
+            txbCNPJ.Text = FormCRUDNotaEntrada.fornecedor.CNPJ;
+            txbNomeFantasia.Text = FormCRUDNotaEntrada.fornecedor.NomeFantasia;
+            txbRazaoSocial.Text = FormCRUDNotaEntrada.fornecedor.RazaoSocial;
+            txbCNAEPrincipal.Text = FormCRUDNotaEntrada.fornecedor.CNAEPrincipal;
+        }
 
-			dgvProdutoDaNota.AutoGenerateColumns = false;
+        private void btnAddProdutos_Click(object sender, EventArgs e) {
+            FormSelectProduto formSelectProduto = new FormSelectProduto(sourceProdutos);
+            formSelectProduto.ShowDialog();
 
-			sourceProdutos.DataSource = produtos;
+            //MessageBox.Show($"Count of sourceProdutos: {sourceProdutos.Count}");
+        }
 
-			dgvProdutoDaNota.DataSource = sourceProdutos;
-		}
+        private void btnAddNE_Click(object sender, EventArgs e) {
+            notaEntrada.ValorTotal = 0;
+            notaEntrada.Numeracao = Convert.ToInt32(txbNumeroNota.Text) | 32;
+            notaEntrada.Serie = Convert.ToInt32(txbSerieNE.Text) | 1;
+            notaEntrada.DataEmicao = DateTime.Now;
+            notaEntrada.FornecedorCNPJ = txbCNPJ.Text;
 
-		private void button1_Click(object sender, EventArgs e) {
-			FormListaFornecedores formListaFornecedores = new FormListaFornecedores();
-			formListaFornecedores.ShowDialog();
+            for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
+                var p = new Produto();
+                p = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
+                notaEntrada.ValorTotal += (float)(p.Preco * Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()));
+            }
 
-			txbCNPJ.Text = FormCRUDNotaEntrada.fornecedor.CNPJ;
-			txbNomeFantasia.Text = FormCRUDNotaEntrada.fornecedor.NomeFantasia;
-			txbRazaoSocial.Text = FormCRUDNotaEntrada.fornecedor.RazaoSocial;
-			txbCNAEPrincipal.Text = FormCRUDNotaEntrada.fornecedor.CNAEPrincipal;
-		}
+            using (var db = new EstoqueContext()) {
+                try {
+                    notaEntrada.IdNotaEntrada = db.NotaEntrada.Max(x => x.IdNotaEntrada);
+                } catch {
+                    notaEntrada.IdNotaEntrada = 1;
+                }
 
-		private void btnAddProdutos_Click(object sender, EventArgs e) {
-			FormSelectProduto formSelectProduto = new FormSelectProduto(sourceProdutos);
-			formSelectProduto.ShowDialog();
+                notaEntrada.IdNotaEntrada++;
 
-			//MessageBox.Show($"Count of sourceProdutos: {sourceProdutos.Count}");
-		}
+                // Adiciona-se a nota ao banco de dados primeiramente
+                db.NotaEntrada.Add(notaEntrada);
 
-		private void btnAddNE_Click(object sender, EventArgs e) {
-			notaEntrada.ValorTotal = 0;
-			notaEntrada.Numeracao = Convert.ToInt32(txbNumeroNota.Text) | 32;
-			notaEntrada.Serie = Convert.ToInt32(txbSerieNE.Text) | 1;
-			notaEntrada.DataEmicao = DateTime.Now;
-			notaEntrada.FornecedorCNPJ = txbCNPJ.Text;
+                db.SaveChanges();
 
-			for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
-				var p = new Produto();
-				p = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
-				notaEntrada.ValorTotal += (float)(p.Preco * Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()));
-			}
+                // Adiciona-se os itens da nota
+                for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
+                    var INE = new ItemNotaEntrada();
+                    INE.ProdutoId = (int)dgvProdutoDaNota.Rows[i].Cells[0].Value;
+                    INE.NotaEntradaId = notaEntrada.IdNotaEntrada;
+                    INE.Quantidade = Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()) | 1;
 
-			using (var db = new EstoqueContext()) {
-				try {
-					notaEntrada.IdNotaEntrada = db.NotaEntrada.Max(x => x.IdNotaEntrada);
-				} catch {
-					notaEntrada.IdNotaEntrada = 1;
-				}
+                    db.ItemNotaEntrada.Add(INE);
 
-				notaEntrada.IdNotaEntrada++;
+                    db.SaveChanges();
 
-				// Adiciona-se a nota ao banco de dados primeiramente
-				db.NotaEntrada.Add(notaEntrada);
+                    INE = null;
+                }
+            }
 
-				db.SaveChanges();
+            notaEntrada = new NotaEntrada();
+        }
 
-				// Adiciona-se os itens da nota
-				for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
-					var INE = new ItemNotaEntrada();
-					INE.ProdutoId = (int)dgvProdutoDaNota.Rows[i].Cells[0].Value;
-					INE.NotaEntradaId = notaEntrada.IdNotaEntrada;
-					INE.Quantidade = Convert.ToInt32(dgvProdutoDaNota.Rows[i].Cells[4].Value.ToString()) | 1;
+        private void btnTest_Click(object sender, EventArgs e) {
+            for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
+                var produto = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
 
-					db.ItemNotaEntrada.Add(INE);
+                var qtd = dgvProdutoDaNota.Rows[i].Cells[4].Value;
 
-					db.SaveChanges();
+                MessageBox.Show($"Produto: {produto.Nome}\nQtd: {qtd}");
+            }
+        }
 
-					INE = null;
-				}
-			}
+        private void dgvProdutoDaNota_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
-			notaEntrada = new NotaEntrada();
-		}
+        }
+        int x = 0;
+        private void dgvProdutoDaNota_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
+            if (
+                (dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem != null) &&
+                (dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName.Contains("."))
 
-		private void btnTest_Click(object sender, EventArgs e) {
-			for (int i = 0; i < dgvProdutoDaNota.Rows.Count; i++) {
-				var produto = dgvProdutoDaNota.Rows[i].DataBoundItem as Produto;
+               ) {
 
-				var qtd = dgvProdutoDaNota.Rows[i].Cells[4].Value;
+                e.Value = BindProperty.resolve(
+                            dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem,
+                            dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName
+                            );
+            }
 
-				MessageBox.Show($"Produto: {produto.Nome}\nQtd: {qtd}");
-			}
-		}
+            foreach (DataGridViewRow row in dgvProdutoDaNota.Rows) {
+                MessageBox.Show(row.Cells[4].Value.ToString());
 
-		private void dgvProdutoDaNota_CellContentClick(object sender, DataGridViewCellEventArgs e) {
-
-		}
-
-		private void dgvProdutoDaNota_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
-			if (
-				(dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem != null) &&
-				(dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName.Contains("."))
-
-			   ) {
-
-				e.Value = BindProperty.resolve(
-							dgvProdutoDaNota.Rows[e.RowIndex].DataBoundItem,
-							dgvProdutoDaNota.Columns[e.ColumnIndex].DataPropertyName
-						);
-			}
-
-		}
+                if (row.Cells[4].Value.ToString() == "") {
+                    row.DefaultCellStyle.ForeColor = Color.Yellow;
+                } else {
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                }
+            }
+            x++;
+        }
 
 
-		private void updateDgv(DataGridViewCellEventArgs e) {
-			try {
-				// Veririca se a linha e a coluna em que se deseja editar está
-				// está na vez
-				if (e.RowIndex != -1 && e.ColumnIndex == 4) {
-					
-					//Pega o valor do dataGridView para ser calculado
-					double valorUnid = Convert.ToDouble(dgvProdutoDaNota.Rows[e.RowIndex].Cells[3].Value);
-					double qtd = Convert.ToInt32(dgvProdutoDaNota.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+        private void updateDgv(DataGridViewCellEventArgs e) {
+            try {
+                // Veririca se a linha e a coluna em que se deseja editar está
+                // está na vez
+                if (e.RowIndex != -1 && e.ColumnIndex == 4) {
 
-					double subTotalProduto = valorUnid * qtd;
+                    //Pega o valor do dataGridView para ser calculado
+                    double valorUnid = Convert.ToDouble(dgvProdutoDaNota.Rows[e.RowIndex].Cells[3].Value);
+                    double qtd = Convert.ToInt32(dgvProdutoDaNota.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
 
-					// Coloca o valor total na ultima celula
-					dgvProdutoDaNota.Rows[e.RowIndex].Cells[5].Value = subTotalProduto;
+                    double subTotalProduto = valorUnid * qtd;
 
-					// Calcula o valor total
-					double valorTotal = 0;
+                    // Coloca o valor total na ultima celula
+                    dgvProdutoDaNota.Rows[e.RowIndex].Cells[5].Value = subTotalProduto;
 
-					foreach (DataGridViewRow rowSubTotProd in dgvProdutoDaNota.Rows) {
-						valorTotal += Convert.ToDouble(rowSubTotProd.Cells["SubTotal"].Value);
-					}
-					
-					// Atualiza o valor total
-					lblValorTotal.Text = $"R$ {valorTotal:C2}";
+                    // Calcula o valor total
+                    double valorTotal = 0;
 
-				} else {
-					Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
-				}
+                    foreach (DataGridViewRow rowSubTotProd in dgvProdutoDaNota.Rows) {
+                        valorTotal += Convert.ToDouble(rowSubTotProd.Cells["SubTotal"].Value);
+                    }
 
-			} catch (Exception erro) {
-				Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
-				Debug.WriteLine(erro.Message);
-			}
-		}
+                    // Atualiza o valor total
+                    lblValorTotal.Text = $"R$ {valorTotal:C2}";
 
-		private void dgvProdutoDaNota_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-			updateDgv(e);
-		}
+                } else {
+                    Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
+                }
 
-		private void dgvProdutoDaNota_DataSourceChanged(object sender, EventArgs e) {
+            } catch (Exception erro) {
+                Debug.WriteLine($"e.RowIndex: {e.RowIndex}\te.ColumnIndex: {e.ColumnIndex}");
+                Debug.WriteLine(erro.Message);
+            }
+        }
 
-			foreach (DataGridViewRow row in dgvProdutoDaNota.Rows) {
-				MessageBox.Show(row.Cells[4].Value.ToString());
+        private void dgvProdutoDaNota_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            updateDgv(e);
+        }
 
-				if (row.Cells[4].Value.ToString() == "") {
-					row.DefaultCellStyle.ForeColor = Color.Yellow;
-				}
-			}
-		}
+        private void dgvProdutoDaNota_DataSourceChanged(object sender, EventArgs e) {
 
-		private void dgvProdutoDaNota_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+            foreach (DataGridViewRow row in dgvProdutoDaNota.Rows) {
+                MessageBox.Show(row.Cells[4].Value.ToString());
 
-		}
-	}
+                if (row.Cells[4].Value.ToString() == "") {
+                    row.DefaultCellStyle.ForeColor = Color.Yellow;
+                }
+            }
+        }
+    }
 }
