@@ -1,4 +1,7 @@
 using SysEstoque.Models;
+using SysEstoque.Telas;
+using SysEstoque.Utils;
+using System;
 using SysVendas;
 
 namespace SysEstoque
@@ -13,13 +16,18 @@ namespace SysEstoque
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormCategoria());
+
+            Globais.init();
+
+			Globais.DBString = "Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022";
+
+			//Application.Run(new FormCategoria());
             //Application.Run(new FormNewProduto());
             //Application.Run(new FormEndereco());
             //Application.Run(new FormCRUDFornecedor());
             //Application.Run(new FormCRUDNotaEntrada());
             //Application.Run(new FormMain());
-            //Application.Run(new FormCRUDNotaEntrada());
+            Application.Run(new FormCRUDNotaEntrada());
             //Application.Run(new FormLogin());
         }
     }
