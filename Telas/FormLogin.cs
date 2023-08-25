@@ -1,4 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.ApplicationServices;
 using SysEstoque.Models;
 using SysEstoque.Utils;
@@ -54,7 +55,7 @@ namespace SysEstoque {
             Usuario user = null;
 
             using (var db = new EstoqueContext()) {
-                user = db.Usuario.FirstOrDefault(x => x.Login == login);
+                user = db.Usuario.Include(p => p.Endereco).FirstOrDefault(x => x.Login == login);
             }
 
             if (user != null) {
