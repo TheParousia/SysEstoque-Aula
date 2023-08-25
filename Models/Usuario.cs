@@ -20,5 +20,15 @@ namespace SysEstoque.Models{
         [ForeignKey(nameof(Endereco))]
         public int? EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
+
+        internal string getStringEndereco() {
+            string endereco = "";
+
+			if (this.Endereco != null) {
+                endereco = $"{this.Endereco.Rua}, nº {this.Endereco.Numero}, rua {this.Endereco.Rua}. Bairro: {this.Endereco.Bairro}";
+			}
+
+            return endereco;
+        }
     }
 }
