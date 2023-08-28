@@ -28,6 +28,7 @@
     <Folder Include="CallAPI\DTO\Cnpj\" />
     <Folder Include="img\produtos\" />
     <Folder Include="Models\Config\" />
+    <Folder Include="Instalador\" />
   </ItemGroup>
 
   <ItemGroup>
