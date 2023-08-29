@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace SysEstoque {
 	public partial class FormCRUDNotaEntrada : Form {
 		public static ICollection<Produto> produtos { get; set; } = new List<Produto>();
-		public static BindingSource? sourceProdutos { get; set; } = new BindingSource();
+		public static BindingSource sourceProdutos { get; set; } = new BindingSource();
 		public static Fornecedor fornecedor { get; set; }
 		private NotaEntrada notaEntrada { get; set; } = new NotaEntrada();
 
@@ -116,7 +116,7 @@ namespace SysEstoque {
 							);
 			}
 
-			if (e.RowIndex > -1) {
+			if (e.RowIndex > -1 && false) {
 				MessageBox.Show(dgvProdutoDaNota.Rows[e.RowIndex].Cells[4].Value.ToString());
 
 				if (dgvProdutoDaNota.Rows[e.RowIndex].Cells[4].Value.ToString() == "") {

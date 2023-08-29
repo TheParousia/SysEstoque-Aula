@@ -52,6 +52,7 @@
 			statusStrip1 = new StatusStrip();
 			toolStripStatusLabel1 = new ToolStripStatusLabel();
 			statusMsg = new ToolStripStatusLabel();
+			btnRegistrar = new Button();
 			groupBox1.SuspendLayout();
 			statusStrip1.SuspendLayout();
 			SuspendLayout();
@@ -305,11 +306,22 @@
 			statusMsg.Name = "statusMsg";
 			statusMsg.Size = new Size(400, 17);
 			// 
+			// btnRegistrar
+			// 
+			btnRegistrar.Location = new Point(799, 434);
+			btnRegistrar.Name = "btnRegistrar";
+			btnRegistrar.Size = new Size(75, 23);
+			btnRegistrar.TabIndex = 6;
+			btnRegistrar.Text = "Registrar";
+			btnRegistrar.UseVisualStyleBackColor = true;
+			btnRegistrar.Click += btnRegistrar_Click;
+			// 
 			// FormCRUDFornecedor
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(886, 485);
+			Controls.Add(btnRegistrar);
 			Controls.Add(statusStrip1);
 			Controls.Add(txbCNPJ);
 			Controls.Add(groupBox1);
@@ -368,5 +380,6 @@
 		private StatusStrip statusStrip1;
 		private ToolStripStatusLabel toolStripStatusLabel1;
 		private ToolStripStatusLabel statusMsg;
+		private Button btnRegistrar;
 	}
 }

@@ -19,7 +19,7 @@ namespace SysEstoque
 
             Globais.init();
 
-			Globais.DBString = "Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022";
+			//Globais.DBString = "Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022";
 
 			//Application.Run(new FormCategoria());
             //Application.Run(new FormNewProduto());

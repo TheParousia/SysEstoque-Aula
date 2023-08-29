@@ -14,7 +14,8 @@ namespace SysEstoque.Utils {
 		public static string DBString = "Server=127.0.0.1;port=3306;database=estoque;uid=root;password=#Root2022";
 		public static string HomeImgsProdutos = HomeSys + "\\img\\produtos\\";
 		//internal static string pathFileInit = HomeSys + "\\data.init";
-		internal static string pathFileInit = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data.init";
+		internal static string pathCommonData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\sys-estoque\\";
+		internal static string pathFileInit = pathCommonData + "\\data.init";
 
 		public static Usuario usuarioAtual { get; internal set; }
 
@@ -23,8 +24,16 @@ namespace SysEstoque.Utils {
 		}
 
 		public static void init() {
+			if (!Directory.Exists(pathCommonData)) {
+				Directory.CreateDirectory(pathCommonData);
+			}
+
+
 			if (!File.Exists(Globais.pathFileInit)) {
 				try {
+
+					Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+
 					FormConfigBancoDados formConfigBancoDados = new FormConfigBancoDados();
 					formConfigBancoDados.ShowDialog();
 

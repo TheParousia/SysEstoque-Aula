@@ -17,7 +17,37 @@ namespace SysEstoque {
         public FormLogin() {
             InitializeComponent();
 
+
+
             using (var db = new EstoqueContext()) {
+                if (db.Usuario.Count() <= 0 ) {
+                    Usuario userDefault = new Usuario();
+
+                    userDefault.Sobrenome = "Usuario padrão";
+                    userDefault.Nome = "Usuario padrão";
+                    userDefault.Email = "Usuario padrão";
+                    userDefault.Telefone = "000000000";
+                    userDefault.Login = "root";
+
+
+					StringBuilder sb = new StringBuilder();
+
+                    using (SHA512 sha512 = SHA512.Create()) {
+                        byte[] hashPwd = sha512.ComputeHash(Encoding.UTF8.GetBytes("toor"));
+                        
+                        foreach(var b in hashPwd) {
+                            sb.Append($"{b:X2}");
+                        }
+
+                        userDefault.HashSenha = sb.ToString();
+                    }
+
+                    db.Usuario.Add(userDefault);
+                    db.SaveChanges();
+
+				}
+
+
                 if (db.Database.CanConnect()) {
                     statusMsgDBConnected.Text = "Esta conectado";
                     statusMsgDBConnected.ForeColor = Color.Green;

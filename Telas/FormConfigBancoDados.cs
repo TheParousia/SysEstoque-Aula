@@ -81,13 +81,19 @@ namespace SysEstoque.Telas {
 		}
 
 		private void btnSalvarConfig_Click(object sender, EventArgs e) {
+			this.DialogResult = DialogResult.OK;
+
 			DBDataConection.Server = txbServidor.Text;
 			DBDataConection.port = txbPort.Text;
 			DBDataConection.uid = txbUID.Text;
 			DBDataConection.password = txbSenha.Text;
 			DBDataConection.database = txbDatabase.Text;
 
-			AdminCredenciais.salve(DBDataConection.getString());
+			try {
+				AdminCredenciais.salve(DBDataConection.getString());
+			}catch(Exception error) {
+				this.DialogResult = DialogResult.None;
+			}
 		}
 	}
 }

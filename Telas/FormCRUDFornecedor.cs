@@ -14,9 +14,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SysEstoque.CallAPI.DTO.Endereco;
+using SysEstoque.Models;
+using SysEstoque.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace SysEstoque {
 	public partial class FormCRUDFornecedor : Form {
+		Fornecedor fornecedor = new Fornecedor();
 
 		CnpjDTO temp = new CnpjDTO();
 		EnderecoDTO endereco = new EnderecoDTO();
@@ -102,6 +106,49 @@ namespace SysEstoque {
 			Task.Delay(2000).ContinueWith((task) => {
 				ClearStatusMsg();
 			});
+		}
+
+		private void btnRegistrar_Click(object sender, EventArgs e) {
+
+			fornecedor.CNPJ = txbCNPJ.Text;
+			fornecedor.RazaoSocial = txbRazaoSocial.Text;
+			fornecedor.NomeFantasia = txbNomeFantazia.Text;
+			fornecedor.CNAEPrincipal = txbCnaePrincipal.Text;
+			fornecedor.Email = txbEmail.Text;
+			fornecedor.Telefone = txbTelefone.Text;
+
+			Endereco endereco = new Endereco();
+
+			endereco.Numero = txbNumero.Text;
+			endereco.CEP = txbCEP.Text;
+			endereco.Rua = txbRua.Text;
+			endereco.Bairro = txbBairro.Text;
+
+
+			fornecedor.endereco = endereco;
+			fornecedor.ResponsavelRegistro = $"{ Globais.usuarioAtual.Nome} | {Globais.usuarioAtual.Login}";
+
+			try {
+				using (var db = new EstoqueContext()) {
+					db.Fornecedor.Add( fornecedor );
+					db.SaveChanges();
+				}
+			} catch (DbUpdateException erro) {
+				MessageBox.Show(
+					$"Um foencedor com o CNPJ {fornecedor.CNPJ} já esta cadastreado",
+					"Duplo registro de indetificador",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+			} catch (Exception error) {
+				MessageBox.Show(
+					$"Erro ao inserir:\n{error.Message}",
+					"Erro",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+			}
+
 		}
 	}
 }
